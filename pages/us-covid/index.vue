@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>Covid-19</h1>
+    <h1>US Covid-19</h1>
     <div class="select-rows">
       <v-select
-        v-model="country"
+        v-model="state"
         outlined
         class="comp"
-        :items="Countries"
-        label="Country"
+        :items="states"
+        label="State"
         @change="submit"
       ></v-select>
       <v-select
@@ -30,7 +30,7 @@
       <v-card class="mx-auto comp" max-height="150" outlined>
         <v-list-item three-line>
           <v-list-item-content>
-            <div class="overline mb-4">{{ country }} {{ status }}</div>
+            <div class="overline mb-4">{{ state }} {{ status }}</div>
             <v-list-item-title class="headline mb-1"
               >{{ caseCount }}
             </v-list-item-title>
@@ -54,28 +54,79 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     statuses: ['deaths', 'confirmed'],
     status: 'confirmed',
-    country: 'US',
+    states: [
+      'Alabama',
+      'Alaska',
+      'American Samoa',
+      'Arizona',
+      'Arkansas',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'Delaware',
+      'District of Columbia',
+      'Federated States of Micronesia',
+      'Florida',
+      'Georgia',
+      'Guam',
+      'Hawaii',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Iowa',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Maine',
+      'Marshall Islands',
+      'Maryland',
+      'Massachusetts',
+      'Michigan',
+      'Minnesota',
+      'Mississippi',
+      'Missouri',
+      'Montana',
+      'Nebraska',
+      'Nevada',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'New York',
+      'North Carolina',
+      'North Dakota',
+      'Northern Mariana Islands',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Palau',
+      'Pennsylvania',
+      'Puerto Rico',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Vermont',
+      'Virgin Island',
+      'Virginia',
+      'Washington',
+      'West Virginia',
+      'Wisconsin',
+      'Wyoming'
+    ],
+    state: 'New York',
     caseCount: '-'
   }),
-  computed: {
-    Countries() {
-      return this.coun.map((el) => {
-        return el.Country
-      })
-    },
-    CountrySlug() {
-      return this.coun.find((el) => {
-        return el.Country === this.country
-      }).Slug
-    }
-  },
   methods: {
     async submit() {
       const { data } = await axios.get(
-        `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
+        `https://api.covid19api.com/dayone/country/us/status/${this.status}`
       )
 
-      const d = data.find((el) => el.Date.substr(0, 10) === this.date)
+      const d = data.find((el) => {
+        return el.Date.substr(0, 10) === this.date && el.Province === this.state
+      })
 
       this.caseCount = d ? d.Cases : '-'
     },

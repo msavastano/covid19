@@ -86,6 +86,11 @@ export default {
           icon: 'mdi-octagram',
           title: 'Covid',
           to: '/covid'
+        },
+        {
+          icon: 'mdi-star',
+          title: 'US-Covid',
+          to: '/us-covid'
         }
       ],
       miniVariant: false,

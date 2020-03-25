@@ -142,7 +142,11 @@ export default {
       // })
 
       const d = this.full.find((el) => {
-        return el.Date.substr(0, 10) === this.date && el.Province === this.state
+        return (
+          el.Date.substr(0, 10) === this.date &&
+          el.Province === this.state &&
+          this.status === el.Status
+        )
       })
 
       this.caseCount = d ? d.Cases : '-'

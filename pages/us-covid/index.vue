@@ -45,9 +45,21 @@
 import axios from 'axios'
 export default {
   async asyncData(context) {
-    const c = await axios.get('https://api.covid19api.com/countries')
+    const coun = await axios.get('https://api.covid19api.com/countries')
+
+    const con = await axios.get(
+      `https://api.covid19api.com/dayone/country/us/status/confirmed`
+    )
+
+    const dea = await axios.get(
+      `https://api.covid19api.com/dayone/country/us/status/deaths`
+    )
+
+    const full = con.data.concat(dea.data)
+
     return {
-      coun: c.data
+      full,
+      coun: coun.data
     }
   },
   data: () => ({
@@ -119,12 +131,17 @@ export default {
     caseCount: '-'
   }),
   methods: {
-    async submit() {
-      const { data } = await axios.get(
-        `https://api.covid19api.com/dayone/country/us/status/${this.status}`
-      )
+    submit() {
+      // async submit() {
+      // const { data } = await axios.get(
+      //   `https://api.covid19api.com/dayone/country/us/status/${this.status}`
+      // )
 
-      const d = data.find((el) => {
+      // const d = data.find((el) => {
+      //   return el.Date.substr(0, 10) === this.date && el.Province === this.state
+      // })
+
+      const d = this.full.find((el) => {
         return el.Date.substr(0, 10) === this.date && el.Province === this.state
       })
 

@@ -75,7 +75,9 @@ export default {
         `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
       )
 
-      const d = data.find((el) => el.Date.substr(0, 10) === this.date)
+      const d = Array.isArray(data)
+        ? data.find((el) => el.Date.substr(0, 10) === this.date)
+        : null
 
       this.caseCount = d ? d.Cases : '-'
     },

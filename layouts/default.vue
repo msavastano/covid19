@@ -44,9 +44,9 @@
 export default {
   data() {
     return {
-      clipped: true,
-      drawer: true,
-      fixed: false,
+      clipped: false,
+      drawer: false,
+      fixed: true,
       items: [
         {
           icon: 'mdi-apps',
@@ -70,3 +70,17 @@ export default {
   }
 }
 </script>
+
+<style>
+.select-rows {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-rows {
+  display: flex;
+  flex-flow: row wrap;
+}
+</style>

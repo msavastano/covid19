@@ -5,7 +5,7 @@
       <v-select
         v-model="state"
         outlined
-        class="comp"
+        class="mx-2"
         :items="states"
         label="State"
         @change="submit"
@@ -13,7 +13,7 @@
       <v-select
         v-model="status"
         outlined
-        class="comp"
+        class="mx-2"
         :items="statuses"
         label="Status"
         @change="submit"
@@ -22,12 +22,11 @@
     <div class="card-rows">
       <v-date-picker
         v-model="date"
-        class="mt-4 comp"
-        :light="true"
+        class="mt-4"
         width="290"
         @change="submit"
       ></v-date-picker>
-      <v-card class="mx-auto comp" max-height="150" outlined>
+      <v-card class="mx-auto" max-height="150" outlined>
         <v-list-item three-line>
           <v-list-item-content>
             <div class="overline mb-4">{{ state }} {{ status }}</div>
@@ -130,6 +129,13 @@ export default {
     state: 'New York',
     caseCount: '-'
   }),
+  computed: {
+    Provinces() {
+      return this.full.map((el) => {
+        return el.Province
+      })
+    }
+  },
   methods: {
     submit() {
       // async submit() {
@@ -157,21 +163,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.select-rows {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-rows {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.comp {
-  margin: 10px;
-}
-</style>

@@ -1,41 +1,44 @@
 <template>
   <div>
-    <h1>Covid-19</h1>
+    <h1>US Covid-19</h1>
     <div class="select-rows">
-      <v-select
-        v-model="country"
-        outlined
-        class="mx-2"
-        :items="Countries"
-        label="Country"
-        @change="submit"
-      ></v-select>
-      <v-select
-        v-model="status"
-        outlined
-        class="mx-2"
-        :items="statuses"
-        label="Status"
-        @change="submit"
-      ></v-select>
-    </div>
-    <div class="card-rows">
-      <v-date-picker
-        v-model="date"
-        class="mt-4"
-        width="290"
-        @change="submit"
-      ></v-date-picker>
-      <v-card class="mx-auto" max-height="150" outlined>
-        <v-list-item three-line>
-          <v-list-item-content>
-            <div class="overline mb-4">{{ country }} {{ status }}</div>
-            <v-list-item-title class="headline mb-1"
-              >{{ caseCount }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card>
+      <div>
+        <v-card class="ma-5" max-width="300">
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="overline mb-4">{{ state }}</div>
+              <v-list-item-title class="headline mb-1">{{
+                caseCount
+              }}</v-list-item-title>
+              <v-list-item-subtitle>{{ status }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+        <v-select
+          v-model="country"
+          outlined
+          class="mx-2"
+          :items="Countries"
+          label="Country"
+          @change="submit"
+        ></v-select>
+        <v-select
+          v-model="status"
+          outlined
+          class="mx-2"
+          :items="statuses"
+          label="Status"
+          @change="submit"
+        ></v-select>
+      </div>
+      <v-layout justify-center>
+        <v-date-picker
+          v-model="date"
+          class="ma-auto"
+          width="290"
+          @change="submit"
+        ></v-date-picker>
+      </v-layout>
     </div>
   </div>
 </template>

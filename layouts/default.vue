@@ -78,9 +78,4 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
-.card-rows {
-  display: flex;
-  flex-flow: row wrap;
-}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>US Covid-19</h1>
+    <h1>Global Covid-19</h1>
     <div class="select-rows">
       <div>
         <v-card class="ma-5" max-width="300">

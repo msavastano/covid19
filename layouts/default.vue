@@ -55,13 +55,23 @@ export default {
         },
         {
           icon: 'mdi-octagram',
-          title: 'Covid',
-          to: '/covid'
+          title: 'Global Covid',
+          to: '/global-covid'
+        },
+        {
+          icon: 'mdi-chart-areaspline',
+          title: 'Global Chart',
+          to: '/global-chart'
         },
         {
           icon: 'mdi-star',
-          title: 'US-Covid',
+          title: 'US Covid',
           to: '/us-covid'
+        },
+        {
+          icon: 'mdi-chart-line-variant',
+          title: 'US Chart',
+          to: '/us-chart'
         }
       ],
       miniVariant: false,

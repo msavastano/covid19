@@ -48,8 +48,6 @@ import axios from 'axios'
 import { groupBy, remove, sumBy } from 'lodash'
 export default {
   async asyncData(context) {
-    const coun = await axios.get('https://api.covid19api.com/countries')
-
     const conOld = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/confirmed'
     )
@@ -130,8 +128,7 @@ export default {
       .concat(aggDea)
 
     return {
-      full,
-      coun: coun.data
+      full
     }
   },
   data: () => ({

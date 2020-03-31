@@ -200,7 +200,7 @@ export default {
       if (d && Array.isArray(d)) {
         d.forEach((element) => {
           casesArr.push(element.Cases)
-          datesArr.push(element.Date.substr(2, 10))
+          datesArr.push(element.Date.substr(5, 5))
         })
       }
 
@@ -208,6 +208,7 @@ export default {
         labels: datesArr,
         datasets: [
           {
+            backgroundColor: '#add8e6',
             label: `${this.state} / ${this.status}`,
             data: casesArr
           }

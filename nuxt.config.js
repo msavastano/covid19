@@ -2,7 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   generate: {
-    fallback: true
+    fallback: true,
+    interval: 1200
   },
   mode: 'universal',
   /*

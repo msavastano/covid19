@@ -71,52 +71,39 @@ export default {
       return groupBy(dateDea[key], 'Date')
     })
 
-    // eslint-disable-next-line no-extend-native
-    Object.defineProperty(Array.prototype, 'flat', {
-      value(depth = 1) {
-        return this.reduce(function(flat, toFlatten) {
-          return flat.concat(
-            Array.isArray(toFlatten) && depth > 1
-              ? toFlatten.flat(depth - 1)
-              : toFlatten
-          )
-        }, [])
-      }
+    let aggCon = stateCon.map((state) => {
+      let cs
+      return Object.keys(state).map((date, i) => {
+        cs = sumBy(state[date], (o) => {
+          return o.Cases
+        })
+        return {
+          Province: state[date][0].Province,
+          Status: 'confirmed',
+          Date: state[date][0].Date,
+          Cases: cs
+        }
+      })
     })
 
-    const aggCon = stateCon
-      .map((state) => {
-        let cs
-        return Object.keys(state).map((date, i) => {
-          cs = sumBy(state[date], (o) => {
-            return o.Cases
-          })
-          return {
-            Province: state[date][0].Province,
-            Status: 'confirmed',
-            Date: state[date][0].Date,
-            Cases: cs
-          }
-        })
-      })
-      .flat()
+    aggCon = [].concat(...aggCon)
 
-    const aggDea = stateDea
-      .map((state) => {
-        let cs
-        return Object.keys(state).map((date, i) => {
-          cs = sumBy(state[date], (o) => {
-            return o.Cases
-          })
-          return {
-            Province: state[date][0].Province,
-            Status: 'deaths',
-            Date: state[date][0].Date,
-            Cases: cs
-          }
+    let aggDea = stateDea.map((state) => {
+      let cs
+      return Object.keys(state).map((date, i) => {
+        cs = sumBy(state[date], (o) => {
+          return o.Cases
         })
+        return {
+          Province: state[date][0].Province,
+          Status: 'deaths',
+          Date: state[date][0].Date,
+          Cases: cs
+        }
       })
-      .flat()
+    })
+
+    aggDea = [].concat(...aggDea)
 
     const full = conOld.data
       .concat(deaOld.data)

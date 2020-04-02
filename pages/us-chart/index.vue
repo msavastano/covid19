@@ -4,7 +4,7 @@
       v-model="state"
       outlined
       class="mx-2"
-      :items="states"
+      :items="StateNames"
       label="Country"
       @change="submit"
     ></v-select>
@@ -120,70 +120,221 @@ export default {
       status: 'confirmed',
       datacollection: null,
       states: [
-        'Alabama',
-        'Alaska',
-        'American Samoa',
-        'Arizona',
-        'Arkansas',
-        'California',
-        'Colorado',
-        'Connecticut',
-        'Delaware',
-        'District of Columbia',
-        'Federated States of Micronesia',
-        'Florida',
-        'Georgia',
-        'Guam',
-        'Hawaii',
-        'Idaho',
-        'Illinois',
-        'Indiana',
-        'Iowa',
-        'Kansas',
-        'Kentucky',
-        'Louisiana',
-        'Maine',
-        'Marshall Islands',
-        'Maryland',
-        'Massachusetts',
-        'Michigan',
-        'Minnesota',
-        'Mississippi',
-        'Missouri',
-        'Montana',
-        'Nebraska',
-        'Nevada',
-        'New Hampshire',
-        'New Jersey',
-        'New Mexico',
-        'New York',
-        'North Carolina',
-        'North Dakota',
-        'Northern Mariana Islands',
-        'Ohio',
-        'Oklahoma',
-        'Oregon',
-        'Palau',
-        'Pennsylvania',
-        'Puerto Rico',
-        'Rhode Island',
-        'South Carolina',
-        'South Dakota',
-        'Tennessee',
-        'Texas',
-        'Utah',
-        'Vermont',
-        'Virgin Island',
-        'Virginia',
-        'Washington',
-        'West Virginia',
-        'Wisconsin',
-        'Wyoming'
+        {
+          name: 'Alabama',
+          pop: 4903185
+        },
+        {
+          name: 'Alaska',
+          pop: 731545
+        },
+        {
+          name: 'Arizona',
+          pop: 7278717
+        },
+        {
+          name: 'Arkansas',
+          pop: 3017825
+        },
+        {
+          name: 'California',
+          pop: 39512223
+        },
+        {
+          name: 'Colorado',
+          pop: 5758736
+        },
+        {
+          name: 'Connecticut',
+          pop: 3565287
+        },
+        {
+          name: 'Delaware',
+          pop: 973764
+        },
+        {
+          name: 'District of Columbia',
+          pop: 705749
+        },
+        {
+          name: 'Florida',
+          pop: 21477737
+        },
+        {
+          name: 'Georgia',
+          pop: 10617423
+        },
+        {
+          name: 'Hawaii',
+          pop: 1415872
+        },
+        {
+          name: 'Idaho',
+          pop: 1787147
+        },
+        {
+          name: 'Illinois',
+          pop: 12671821
+        },
+        {
+          name: 'Indiana',
+          pop: 6732219
+        },
+        {
+          name: 'Iowa',
+          pop: 3155070
+        },
+        {
+          name: 'Kansas',
+          pop: 2913314
+        },
+        {
+          name: 'Kentucky',
+          pop: 4467673
+        },
+        {
+          name: 'Louisiana',
+          pop: 4648794
+        },
+        {
+          name: 'Maine',
+          pop: 1344212
+        },
+        {
+          name: 'Maryland',
+          pop: 6045680
+        },
+        {
+          name: 'Massachusetts',
+          pop: 6949503
+        },
+        {
+          name: 'Michigan',
+          pop: 9986857
+        },
+        {
+          name: 'Minnesota',
+          pop: 5639632
+        },
+        {
+          name: 'Mississippi',
+          pop: 2976149
+        },
+        {
+          name: 'Missouri',
+          pop: 6137428
+        },
+        {
+          name: 'Montana',
+          pop: 1068778
+        },
+        {
+          name: 'Nebraska',
+          pop: 1934408
+        },
+        {
+          name: 'Nevada',
+          pop: 3080156
+        },
+        {
+          name: 'New Hampshire',
+          pop: 1359711
+        },
+        {
+          name: 'New Jersey',
+          pop: 8882190
+        },
+        {
+          name: 'New Mexico',
+          pop: 2096829
+        },
+        {
+          name: 'New York',
+          pop: 19453561
+        },
+        {
+          name: 'North Carolina',
+          pop: 10488084
+        },
+        {
+          name: 'North Dakota',
+          pop: 762062
+        },
+        {
+          name: 'Ohio',
+          pop: 11689100
+        },
+        {
+          name: 'Oklahoma',
+          pop: 3956971
+        },
+        {
+          name: 'Oregon',
+          pop: 4217737
+        },
+        {
+          name: 'Pennsylvania',
+          pop: 12801989
+        },
+        {
+          name: 'Rhode Island',
+          pop: 1059361
+        },
+        {
+          name: 'South Carolina',
+          pop: 5148714
+        },
+        {
+          name: 'South Dakota',
+          pop: 884659
+        },
+        {
+          name: 'Tennessee',
+          pop: 6833174
+        },
+        {
+          name: 'Texas',
+          pop: 28995881
+        },
+        {
+          name: 'Utah',
+          pop: 3205958
+        },
+        {
+          name: 'Vermont',
+          pop: 623989
+        },
+        {
+          name: 'Virginia',
+          pop: 8535519
+        },
+        {
+          name: 'Washington',
+          pop: 7614893
+        },
+        {
+          name: 'West Virginia',
+          pop: 1792065
+        },
+        {
+          name: 'Wisconsin',
+          pop: 5822434
+        },
+        {
+          name: 'Wyoming',
+          pop: 578759
+        }
       ],
       state: 'New York'
     }
   },
-  computed: {},
+  computed: {
+    StateNames() {
+      return this.states.map((el) => {
+        return el.name
+      })
+    }
+  },
   mounted() {
     this.fillData()
   },
@@ -197,9 +348,13 @@ export default {
       })
       const casesArr = []
       const datesArr = []
+      const pop = this.states.find((st) => {
+        return st.name === this.state
+      }).pop
       if (d && Array.isArray(d)) {
         d.forEach((element) => {
-          casesArr.push(element.Cases)
+          const norm = (element.Cases / pop) * 100000
+          casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
       }
@@ -209,7 +364,7 @@ export default {
         datasets: [
           {
             backgroundColor: '#add8e6',
-            label: `${this.state} / ${this.status}`,
+            label: `${this.state} / ${this.status} per 100,000 pop`,
             data: casesArr
           }
         ]

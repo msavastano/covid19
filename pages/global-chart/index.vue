@@ -66,11 +66,17 @@ export default {
       const { data } = await axios.get(
         `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
       )
+
+      const pop = await axios.get(
+        `https://restcountries.eu/rest/v2/name/${this.country}?fullText=true`
+      )
+
       const casesArr = []
       const datesArr = []
       if (data && Array.isArray(data)) {
         data.forEach((element) => {
-          casesArr.push(element.Cases)
+          const norm = (element.Cases / pop.data[0].population) * 1000000
+          casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
       }
@@ -80,7 +86,7 @@ export default {
         datasets: [
           {
             backgroundColor: '#add8e6',
-            label: `${this.country} / ${this.status}`,
+            label: `${this.country} / ${this.status} per 1,000,000 pop`,
             data: casesArr
           }
         ]

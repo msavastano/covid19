@@ -118,7 +118,7 @@ export default {
     return {
       statuses: ['deaths', 'confirmed'],
       status: 'confirmed',
-      datacollection: null,
+      datacollection: { labels: [], datasets: [] },
       states: [
         {
           name: 'Alabama',

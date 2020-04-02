@@ -39,7 +39,7 @@ export default {
     return {
       statuses: ['deaths', 'confirmed'],
       status: 'confirmed',
-      datacollection: null,
+      datacollection: { labels: [], datasets: [] },
       country: 'US'
     }
   },
@@ -66,11 +66,9 @@ export default {
       const { data } = await axios.get(
         `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
       )
-
       const pop = await axios.get(
-        `https://restcountries.eu/rest/v2/name/${this.country}?fullText=true`
+        `https://restcountries.eu/rest/v2/name/${this.country.trim()}?fullText=true`
       )
-
       const casesArr = []
       const datesArr = []
       if (data && Array.isArray(data)) {

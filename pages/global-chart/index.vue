@@ -66,14 +66,23 @@ export default {
       const { data } = await axios.get(
         `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
       )
-      const pop = await axios.get(
-        `https://restcountries.eu/rest/v2/name/${this.country.trim()}?fullText=true`
-      )
+      let label = `${this.country} / ${this.status} per 1,000,000 pop`
+      let pop
+      try {
+        pop = await axios.get(
+          `https://restcountries.eu/rest/v2/name/${this.country.trim()}?fullText=true`
+        )
+      } catch (err) {
+        pop = null
+        label = `Missing population data for ${this.country} / ${this.status}`
+      }
       const casesArr = []
       const datesArr = []
       if (data && Array.isArray(data)) {
         data.forEach((element) => {
-          const norm = (element.Cases / pop.data[0].population) * 1000000
+          const norm = pop
+            ? (element.Cases / pop.data[0].population) * 1000000
+            : element.Cases
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
@@ -84,7 +93,7 @@ export default {
         datasets: [
           {
             backgroundColor: '#add8e6',
-            label: `${this.country} / ${this.status} per 1,000,000 pop`,
+            label,
             data: casesArr
           }
         ]

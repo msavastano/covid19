@@ -81,7 +81,7 @@ export default {
       if (data && Array.isArray(data)) {
         data.forEach((element) => {
           const norm = pop
-            ? (element.Cases / pop.data[0].population) * 1000000
+            ? Math.round((element.Cases / pop.data[0].population) * 1000000)
             : element.Cases
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
@@ -92,7 +92,8 @@ export default {
         labels: datesArr,
         datasets: [
           {
-            backgroundColor: '#add8e6',
+            backgroundColor:
+              this.status === 'confirmed' ? '#add8e6' : '#ffcccb',
             label,
             data: casesArr
           }

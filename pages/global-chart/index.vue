@@ -55,6 +55,11 @@ export default {
       return this.coun.find((el) => {
         return el.Country === this.country
       }).Slug
+    },
+    IsoCode() {
+      return this.coun.find((el) => {
+        return el.Country === this.country
+      }).ISO2
     }
   },
   mounted() {
@@ -72,7 +77,7 @@ export default {
       let pop
       try {
         pop = await axios.get(
-          `https://restcountries.eu/rest/v2/name/${this.country.trim()}?fullText=true`
+          `https://restcountries.eu/rest/v2/alpha/${this.IsoCode}`
         )
       } catch (err) {
         pop = null
@@ -83,7 +88,9 @@ export default {
       if (data && Array.isArray(data)) {
         data.forEach((element) => {
           const norm = pop
-            ? Math.round((element.Cases / pop.data[0].population) * 1000000)
+            ? Math.round(
+                (element.Cases / pop.data.population) * 1000000 * 100
+              ) / 100
             : element.Cases
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))

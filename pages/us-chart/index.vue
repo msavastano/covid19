@@ -342,7 +342,7 @@ export default {
       }).pop
       if (d && Array.isArray(d)) {
         d.forEach((element) => {
-          const norm = Math.round((element.Cases / pop) * 100000)
+          const norm = Math.round((element.Cases / pop) * 100000 * 100) / 100
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })

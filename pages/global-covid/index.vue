@@ -56,14 +56,16 @@ export default {
     date: new Date().toISOString().substr(0, 10),
     statuses: ['deaths', 'confirmed'],
     status: 'confirmed',
-    country: 'US',
+    country: 'United States of America',
     caseCount: '-'
   }),
   computed: {
     Countries() {
-      return this.coun.map((el) => {
-        return el.Country
-      })
+      return this.coun
+        .map((el) => {
+          return el.Country
+        })
+        .sort()
     },
     CountrySlug() {
       return this.coun.find((el) => {

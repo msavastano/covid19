@@ -23,7 +23,7 @@
 
 <script>
 import axios from 'axios'
-import { groupBy, remove, sumBy } from 'lodash'
+import { groupBy, sumBy } from 'lodash'
 import LineChart from '@/components/LineChart.vue'
 
 export default {
@@ -31,29 +31,21 @@ export default {
     LineChart
   },
   async asyncData(context) {
-    const conOld = await axios.get(
+    const conNew = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/confirmed'
     )
 
-    const deaOld = await axios.get(
+    const deaNew = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/deaths'
     )
 
-    const deaNew = remove(deaOld.data, (el) => {
-      return el.Date > '2020-03-22T00:00:00Z'
-    })
-
-    const conNew = remove(conOld.data, (el) => {
-      return el.Date > '2020-03-22T00:00:00Z'
-    })
-
-    const gCon = conNew.map((el) => {
+    const gCon = conNew.data.map((el) => {
       const regex = /^([^,])+/g
       el.Province = el.Province.match(regex)[0]
       return el
     })
 
-    const dCon = deaNew.map((el) => {
+    const dCon = deaNew.data.map((el) => {
       const regex = /^([^,])+/g
       el.Province = el.Province.match(regex)[0]
       return el
@@ -105,10 +97,7 @@ export default {
 
     aggDea = [].concat(...aggDea)
 
-    const full = conOld.data
-      .concat(deaOld.data)
-      .concat(aggCon)
-      .concat(aggDea)
+    const full = aggCon.concat(aggDea)
 
     return {
       full

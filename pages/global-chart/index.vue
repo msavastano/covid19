@@ -40,14 +40,16 @@ export default {
       statuses: ['deaths', 'confirmed'],
       status: 'confirmed',
       datacollection: { labels: [], datasets: [] },
-      country: 'US'
+      country: 'United States of America'
     }
   },
   computed: {
     Countries() {
-      return this.coun.map((el) => {
-        return el.Country
-      })
+      return this.coun
+        .map((el) => {
+          return el.Country
+        })
+        .sort()
     },
     CountrySlug() {
       return this.coun.find((el) => {

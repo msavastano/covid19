@@ -111,207 +111,258 @@ export default {
       states: [
         {
           name: 'Alabama',
-          pop: 4903185
+          pop: 4903185,
+          abbr: 'AL'
         },
         {
           name: 'Alaska',
-          pop: 731545
+          pop: 731545,
+          abbr: 'AK'
         },
         {
           name: 'Arizona',
-          pop: 7278717
+          pop: 7278717,
+          abbr: 'AZ'
         },
         {
           name: 'Arkansas',
-          pop: 3017825
+          pop: 3017825,
+          abbr: 'AR'
         },
         {
           name: 'California',
-          pop: 39512223
+          pop: 39512223,
+          abbr: 'CA'
         },
         {
           name: 'Colorado',
-          pop: 5758736
+          pop: 5758736,
+          abbr: 'CO'
         },
         {
           name: 'Connecticut',
-          pop: 3565287
+          pop: 3565287,
+          abbr: 'CT'
         },
         {
           name: 'Delaware',
-          pop: 973764
+          pop: 973764,
+          abbr: 'DE'
         },
         {
           name: 'District of Columbia',
-          pop: 705749
+          pop: 705749,
+          abbr: 'DC'
         },
         {
           name: 'Florida',
-          pop: 21477737
+          pop: 21477737,
+          abbr: 'FL'
         },
         {
           name: 'Georgia',
-          pop: 10617423
+          pop: 10617423,
+          abbr: 'GA'
         },
         {
           name: 'Hawaii',
-          pop: 1415872
+          pop: 1415872,
+          abbr: 'HI'
         },
         {
           name: 'Idaho',
-          pop: 1787147
+          pop: 1787147,
+          abbr: 'ID'
         },
         {
           name: 'Illinois',
-          pop: 12671821
+          pop: 12671821,
+          abbr: 'IL'
         },
         {
           name: 'Indiana',
-          pop: 6732219
+          pop: 6732219,
+          abbr: 'IN'
         },
         {
           name: 'Iowa',
-          pop: 3155070
+          pop: 3155070,
+          abbr: ''
         },
         {
           name: 'Kansas',
-          pop: 2913314
+          pop: 2913314,
+          abbr: 'KS'
         },
         {
           name: 'Kentucky',
-          pop: 4467673
+          pop: 4467673,
+          abbr: 'KY'
         },
         {
           name: 'Louisiana',
-          pop: 4648794
+          pop: 4648794,
+          abbr: 'LA'
         },
         {
           name: 'Maine',
-          pop: 1344212
+          pop: 1344212,
+          abbr: 'ME'
         },
         {
           name: 'Maryland',
-          pop: 6045680
+          pop: 6045680,
+          abbr: 'MD'
         },
         {
           name: 'Massachusetts',
-          pop: 6949503
+          pop: 6949503,
+          abbr: 'MA'
         },
         {
           name: 'Michigan',
-          pop: 9986857
+          pop: 9986857,
+          abbr: 'MI'
         },
         {
           name: 'Minnesota',
-          pop: 5639632
+          pop: 5639632,
+          abbr: 'MN'
         },
         {
           name: 'Mississippi',
-          pop: 2976149
+          pop: 2976149,
+          abbr: 'MS'
         },
         {
           name: 'Missouri',
-          pop: 6137428
+          pop: 6137428,
+          abbr: 'MO'
         },
         {
           name: 'Montana',
-          pop: 1068778
+          pop: 1068778,
+          abbr: 'MT'
         },
         {
           name: 'Nebraska',
-          pop: 1934408
+          pop: 1934408,
+          abbr: 'NE'
         },
         {
           name: 'Nevada',
-          pop: 3080156
+          pop: 3080156,
+          abbr: 'NV'
         },
         {
           name: 'New Hampshire',
-          pop: 1359711
+          pop: 1359711,
+          abbr: 'NH'
         },
         {
           name: 'New Jersey',
-          pop: 8882190
+          pop: 8882190,
+          abbr: 'NJ'
         },
         {
           name: 'New Mexico',
-          pop: 2096829
+          pop: 2096829,
+          abbr: 'NM'
         },
         {
           name: 'New York',
-          pop: 19453561
+          pop: 19453561,
+          abbr: 'NY'
         },
         {
           name: 'North Carolina',
-          pop: 10488084
+          pop: 10488084,
+          abbr: 'NC'
         },
         {
           name: 'North Dakota',
-          pop: 762062
+          pop: 762062,
+          abbr: 'ND'
         },
         {
           name: 'Ohio',
-          pop: 11689100
+          pop: 11689100,
+          abbr: 'OH'
         },
         {
           name: 'Oklahoma',
-          pop: 3956971
+          pop: 3956971,
+          abbr: 'OK'
         },
         {
           name: 'Oregon',
-          pop: 4217737
+          pop: 4217737,
+          abbr: 'OR'
         },
         {
           name: 'Pennsylvania',
-          pop: 12801989
+          pop: 12801989,
+          abbr: 'PA'
         },
         {
           name: 'Rhode Island',
-          pop: 1059361
+          pop: 1059361,
+          abbr: 'RI'
         },
         {
           name: 'South Carolina',
-          pop: 5148714
+          pop: 5148714,
+          abbr: 'SC'
         },
         {
           name: 'South Dakota',
-          pop: 884659
+          pop: 884659,
+          abbr: 'SD'
         },
         {
           name: 'Tennessee',
-          pop: 6833174
+          pop: 6833174,
+          abbr: 'TN'
         },
         {
           name: 'Texas',
-          pop: 28995881
+          pop: 28995881,
+          abbr: 'TX'
         },
         {
           name: 'Utah',
-          pop: 3205958
+          pop: 3205958,
+          abbr: 'UT'
         },
         {
           name: 'Vermont',
-          pop: 623989
+          pop: 623989,
+          abbr: 'VT'
         },
         {
           name: 'Virginia',
-          pop: 8535519
+          pop: 8535519,
+          abbr: 'VA'
         },
         {
           name: 'Washington',
-          pop: 7614893
+          pop: 7614893,
+          abbr: 'WA'
         },
         {
           name: 'West Virginia',
-          pop: 1792065
+          pop: 1792065,
+          abbr: 'WV'
         },
         {
           name: 'Wisconsin',
-          pop: 5822434
+          pop: 5822434,
+          abbr: 'WI'
         },
         {
           name: 'Wyoming',
-          pop: 578759
+          pop: 578759,
+          abbr: 'WY'
         }
       ],
       state: 'New York'
@@ -331,19 +382,41 @@ export default {
     submit() {
       this.fillData()
     },
-    fillData() {
+    async fillData() {
       const d = this.full.filter((el) => {
         return el.Province === this.state && this.status === el.Status
       })
-      const casesArr = []
+      // const casesArr = []
       const datesArr = []
       const pop = this.states.find((st) => {
         return st.name === this.state
       }).pop
+
+      const abbr = this.states.find((st) => {
+        return st.name === this.state
+      }).abbr
+
+      const testing = await axios.get(
+        'https://covidtracking.com/api/v1/states/daily.json'
+      )
+
+      const tData = []
+
       if (d && Array.isArray(d)) {
         d.forEach((element) => {
-          const norm = Math.round((element.Cases / pop) * 100000 * 100) / 100
-          casesArr.push(norm)
+          const tests = testing.data.find((t) => {
+            return (
+              t.dateChecked.substr(0, 10) === element.Date.substr(0, 10) &&
+              t.state === abbr
+            )
+          })
+          const tot = tests ? tests.total : 0
+          const normCases = (element.Cases / pop) * 100000
+          const normTests = Math.round((tot / pop) * 100000 * 100) / 100
+          const tt = Math.round((normTests / normCases) * 100) / 100
+          // const norm = Math.round(normCases * 100) / 100
+          tData.push(tt)
+          // casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
       }
@@ -351,11 +424,16 @@ export default {
       this.datacollection = {
         labels: datesArr,
         datasets: [
+          // {
+          //   backgroundColor:
+          //     this.status === 'confirmed' ? '#add8e6' : '#ffcccb',
+          //   label: `${this.state} / ${this.status} per 100,000 pop`,
+          //   data: casesArr
+          // },
           {
-            backgroundColor:
-              this.status === 'confirmed' ? '#add8e6' : '#ffcccb',
-            label: `${this.state} / ${this.status} per 100,000 pop`,
-            data: casesArr
+            backgroundColor: '#ffcaaa',
+            label: `Tests / Cases ratio normalized 100,000 pop`,
+            data: tData
           }
         ]
       }

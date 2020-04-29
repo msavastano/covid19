@@ -38,7 +38,7 @@ export default {
     const deaNew = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/deaths'
     )
-
+    console.log(deaNew)
     const gCon = conNew.data.map((el) => {
       const regex = /^([^,])+/g
       el.Province = el.Province.match(regex)[0]
@@ -332,29 +332,104 @@ export default {
       this.fillData()
     },
     fillData() {
+      console.log(this.full)
       const d = this.full.filter((el) => {
         return el.Province === this.state && this.status === el.Status
       })
+      const otherState = 'Georgia'
+      const DAYS = 7
+      const os = this.full.filter((el) => {
+        return el.Province === otherState && this.status === el.Status
+      })
       const casesArr = []
+      const osCasesArr = []
       const datesArr = []
+      const osDatesArr = []
       const pop = this.states.find((st) => {
         return st.name === this.state
       }).pop
+      const otherPop = this.states.find((st) => {
+        return st.name === otherState
+      }).pop
+
       if (d && Array.isArray(d)) {
-        d.forEach((element) => {
-          const norm = Math.round((element.Cases / pop) * 100000 * 100) / 100
+        d.forEach((element, i) => {
+          const prev = i - 1
+          if (i !== 0) {
+            element.newCases = element.Cases - d[prev].Cases
+          } else {
+            element.newCases = 0
+          }
+
+          if (i > DAYS) {
+            let added = 0
+            for (let j = 1; j < DAYS + 1; j++) {
+              added = added + d[i - j].newCases
+            }
+            element.newCasesAve = added / DAYS
+          } else {
+            element.newCasesAve = 0
+          }
+          const norm =
+            Math.round((element.newCasesAve / pop) * 1000000 * 100) / 100
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
       }
 
+      if (os && Array.isArray(os)) {
+        os.forEach((element, i) => {
+          const prev = i - 1
+          if (i !== 0) {
+            element.newCases = element.Cases - os[prev].Cases
+          } else {
+            element.newCases = 0
+          }
+
+          if (i > DAYS) {
+            let added = 0
+            for (let j = 1; j < DAYS + 1; j++) {
+              added = added + os[i - j].newCases
+            }
+            element.newCasesAve = added / DAYS
+          } else {
+            element.newCasesAve = 0
+          }
+          const norm =
+            Math.round((element.newCasesAve / otherPop) * 1000000 * 100) / 100
+          osCasesArr.push(norm)
+          osDatesArr.push(element.Date.substr(5, 5))
+        })
+      }
+
+      let days = datesArr
+      const diff = casesArr.length - osCasesArr.length
+      console.log(casesArr.length - osCasesArr.length)
+      const posDiff = diff > 0 ? diff : diff * -1
+      for (let k = 0; k < posDiff; k++) {
+        if (diff < 0) {
+          console.log('cases')
+          casesArr.unshift(0)
+          days = osDatesArr
+        } else {
+          console.log('os cases')
+          osCasesArr.unshift(0)
+        }
+      }
+
       this.datacollection = {
-        labels: datesArr,
+        labels: days,
         datasets: [
           {
             backgroundColor:
+              this.status === 'confirmed' ? '#ffd8e6' : '#aacccb',
+            label: `${otherState} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: osCasesArr
+          },
+          {
+            backgroundColor:
               this.status === 'confirmed' ? '#add8e6' : '#ffcccb',
-            label: `${this.state} / ${this.status} per 100,000 pop`,
+            label: `${this.state} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
             data: casesArr
           }
         ]

@@ -38,22 +38,10 @@ export default {
     const deaNew = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/deaths'
     )
-    console.log(deaNew)
-    const gCon = conNew.data.map((el) => {
-      const regex = /^([^,])+/g
-      el.Province = el.Province.match(regex)[0]
-      return el
-    })
 
-    const dCon = deaNew.data.map((el) => {
-      const regex = /^([^,])+/g
-      el.Province = el.Province.match(regex)[0]
-      return el
-    })
+    const dateDea = groupBy(deaNew.data, 'Province')
 
-    const dateDea = groupBy(dCon, 'Province')
-
-    const dateCon = groupBy(gCon, 'Province')
+    const dateCon = groupBy(conNew.data, 'Province')
 
     const stateCon = Object.keys(dateCon).map((key) => {
       return groupBy(dateCon[key], 'Date')
@@ -332,7 +320,6 @@ export default {
       this.fillData()
     },
     fillData() {
-      console.log(this.full)
       const d = this.full.filter((el) => {
         return el.Province === this.state && this.status === el.Status
       })

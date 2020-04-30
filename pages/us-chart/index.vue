@@ -1,21 +1,65 @@
 <template>
   <div class="small">
-    <v-select
-      v-model="state"
-      outlined
-      class="mx-2"
-      :items="StateNames"
-      label="Country"
-      @change="submit"
-    ></v-select>
-    <v-select
-      v-model="status"
-      outlined
-      class="mx-2"
-      :items="statuses"
-      label="Status"
-      @change="submit"
-    ></v-select>
+    <v-container fluid>
+      <v-row align="center">
+        <v-col class="d-flex" cols="12">
+          <v-select
+            v-model="stateTwo"
+            outlined
+            class="mx-2"
+            :items="StateNames"
+            label="State"
+            @change="submit"
+          ></v-select>
+          <v-select
+            v-model="state"
+            outlined
+            class="mx-2"
+            :items="StateNames"
+            label="State"
+            @change="submit"
+          ></v-select>
+        </v-col>
+        <v-col class="d-flex" cols="12">
+          <v-select
+            v-model="stateThree"
+            outlined
+            class="mx-2"
+            :items="StateNames"
+            label="State"
+            @change="submit"
+          ></v-select>
+          <v-select
+            v-model="stateFour"
+            outlined
+            class="mx-2"
+            :items="StateNames"
+            label="State"
+            @change="submit"
+          ></v-select>
+        </v-col>
+        <v-col class="d-flex" cols="6">
+          <v-select
+            v-model="stateFive"
+            outlined
+            class="mx-2"
+            :items="StateNames"
+            label="State"
+            @change="submit"
+          ></v-select>
+        </v-col>
+        <v-col class="d-flex" cols="10">
+          <v-select
+            v-model="status"
+            outlined
+            class="mx-2"
+            :items="statuses"
+            label="Status"
+            @change="submit"
+          ></v-select>
+        </v-col>
+      </v-row>
+    </v-container>
     <line-chart :chart-data="datacollection"></line-chart>
     <button @click="fillData()">Line Chart</button>
   </div>
@@ -302,7 +346,11 @@ export default {
           pop: 578759
         }
       ],
-      state: 'New York'
+      state: 'New York',
+      stateTwo: 'New Jersey',
+      stateThree: 'Rhode Island',
+      stateFour: 'Massachusetts',
+      stateFive: 'Connecticut'
     }
   },
   computed: {
@@ -316,29 +364,9 @@ export default {
     this.fillData()
   },
   methods: {
-    submit() {
-      this.fillData()
-    },
-    fillData() {
-      const d = this.full.filter((el) => {
-        return el.Province === this.state && this.status === el.Status
-      })
-      const otherState = 'Georgia'
-      const DAYS = 7
-      const os = this.full.filter((el) => {
-        return el.Province === otherState && this.status === el.Status
-      })
+    getData(d, pop, DAYS) {
       const casesArr = []
-      const osCasesArr = []
       const datesArr = []
-      const osDatesArr = []
-      const pop = this.states.find((st) => {
-        return st.name === this.state
-      }).pop
-      const otherPop = this.states.find((st) => {
-        return st.name === otherState
-      }).pop
-
       if (d && Array.isArray(d)) {
         d.forEach((element, i) => {
           const prev = i - 1
@@ -363,61 +391,128 @@ export default {
           datesArr.push(element.Date.substr(5, 5))
         })
       }
-
-      if (os && Array.isArray(os)) {
-        os.forEach((element, i) => {
-          const prev = i - 1
-          if (i !== 0) {
-            element.newCases = element.Cases - os[prev].Cases
-          } else {
-            element.newCases = 0
-          }
-
-          if (i > DAYS) {
-            let added = 0
-            for (let j = 1; j < DAYS + 1; j++) {
-              added = added + os[i - j].newCases
-            }
-            element.newCasesAve = added / DAYS
-          } else {
-            element.newCasesAve = 0
-          }
-          const norm =
-            Math.round((element.newCasesAve / otherPop) * 1000000 * 100) / 100
-          osCasesArr.push(norm)
-          osDatesArr.push(element.Date.substr(5, 5))
-        })
+      return {
+        casesArr,
+        datesArr
       }
+    },
+    submit() {
+      this.fillData()
+    },
+    random() {
+      return Math.floor(Math.random() * 254 + 1).toString()
+    },
+    fillData() {
+      const DAYS = 14
+      const one = this.full.filter((el) => {
+        return el.Province === this.state && this.status === el.Status
+      })
 
-      let days = datesArr
-      const diff = casesArr.length - osCasesArr.length
-      console.log(casesArr.length - osCasesArr.length)
-      const posDiff = diff > 0 ? diff : diff * -1
-      for (let k = 0; k < posDiff; k++) {
-        if (diff < 0) {
-          console.log('cases')
-          casesArr.unshift(0)
-          days = osDatesArr
-        } else {
-          console.log('os cases')
-          osCasesArr.unshift(0)
+      const two = this.full.filter((el) => {
+        return el.Province === this.stateTwo && this.status === el.Status
+      })
+
+      const three = this.full.filter((el) => {
+        return el.Province === this.stateThree && this.status === el.Status
+      })
+
+      const four = this.full.filter((el) => {
+        return el.Province === this.stateFour && this.status === el.Status
+      })
+
+      const five = this.full.filter((el) => {
+        return el.Province === this.stateFive && this.status === el.Status
+      })
+
+      const pop = this.states.find((st) => {
+        return st.name === this.state
+      }).pop
+      const popTwo = this.states.find((st) => {
+        return st.name === this.stateTwo
+      }).pop
+      const popThree = this.states.find((st) => {
+        return st.name === this.stateThree
+      }).pop
+      const popFour = this.states.find((st) => {
+        return st.name === this.stateFour
+      }).pop
+      const popFive = this.states.find((st) => {
+        return st.name === this.stateFive
+      }).pop
+
+      const casesArrOne = this.getData(one, pop, DAYS)
+      const casesArrTwo = this.getData(two, popTwo, DAYS)
+      const casesArrThree = this.getData(three, popThree, DAYS)
+      const casesArrFour = this.getData(four, popFour, DAYS)
+      const casesArrFive = this.getData(five, popFive, DAYS)
+
+      const container = []
+
+      container.push(
+        casesArrOne,
+        casesArrTwo,
+        casesArrThree,
+        casesArrFour,
+        casesArrFive
+      )
+
+      container.sort(function(a, b) {
+        return b.casesArr.length - a.casesArr.length
+      })
+
+      const days = container[0].datesArr
+      for (let k = 1; k < 5; k++) {
+        const diff = container[0].casesArr.length - container[k].casesArr.length
+        for (let l = 0; l < diff; l++) {
+          container[k].casesArr.unshift(0)
         }
       }
-
       this.datacollection = {
         labels: days,
         datasets: [
           {
             backgroundColor:
-              this.status === 'confirmed' ? '#ffd8e6' : '#aacccb',
-            label: `${otherState} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
-            data: osCasesArr
+              this.status === 'confirmed'
+                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
+                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
+            label: `${this.state} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: casesArrOne.casesArr
           },
           {
+            fillOpacity: 0.3,
             backgroundColor:
-              this.status === 'confirmed' ? '#add8e6' : '#ffcccb',
-            label: `${this.state} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
-            data: casesArr
+              this.status === 'confirmed'
+                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
+                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
+            label: `${this.stateTwo} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: casesArrTwo.casesArr
+          },
+          {
+            fillOpacity: 0.3,
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
+                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
+            label: `${this.stateThree} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: casesArrThree.casesArr
+          },
+          {
+            fillOpacity: 0.3,
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
+                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
+            label: `${this.stateFour} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: casesArrFour.casesArr
+          },
+          {
+            fillOpacity: 0.3,
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
+                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
+            label: `${this.stateFive} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            data: casesArrFive.casesArr
           }
         ]
       }

@@ -48,6 +48,14 @@
         </v-col>
         <v-col class="d-flex" cols="12">
           <v-select
+            v-model="status"
+            outlined
+            class="mx-2"
+            :items="statuses"
+            label="Status"
+            @change="submit"
+          ></v-select>
+          <v-select
             v-model="perPop"
             outlined
             class="mx-2"
@@ -93,10 +101,20 @@ export default {
       'https://api.covid19api.com/dayone/country/us/status/confirmed'
     )
 
+    const deaNew = await axios.get(
+      'https://api.covid19api.com/dayone/country/us/status/deaths'
+    )
+
+    const dateDea = groupBy(deaNew.data, 'Province')
+
     const dateCon = groupBy(conNew.data, 'Province')
 
     const stateCon = Object.keys(dateCon).map((key) => {
       return groupBy(dateCon[key], 'Date')
+    })
+
+    const stateDea = Object.keys(dateDea).map((key) => {
+      return groupBy(dateDea[key], 'Date')
     })
 
     let aggCon = stateCon.map((state) => {
@@ -116,7 +134,24 @@ export default {
 
     aggCon = [].concat(...aggCon)
 
-    const full = aggCon
+    let aggDea = stateDea.map((state) => {
+      let cs
+      return Object.keys(state).map((date, i) => {
+        cs = sumBy(state[date], (o) => {
+          return o.Cases
+        })
+        return {
+          Province: state[date][0].Province,
+          Status: 'deaths',
+          Date: state[date][0].Date,
+          Cases: cs
+        }
+      })
+    })
+
+    aggDea = [].concat(...aggDea)
+
+    const full = aggCon.concat(aggDea)
 
     return {
       full,
@@ -125,6 +160,8 @@ export default {
   },
   data() {
     return {
+      statuses: ['deaths', 'confirmed'],
+      status: 'confirmed',
       datacollection: { labels: [], datasets: [] },
       states: [
         {
@@ -391,30 +428,42 @@ export default {
     fillData() {
       const DAYS = parseInt(this.rollDays)
       const one = this.full.filter((el) => {
-        return el.Province === this.state && el.Date > '2020-02-15-T00:00:00Z'
+        return (
+          el.Province === this.state &&
+          this.status === el.Status &&
+          el.Date > '2020-02-15-T00:00:00Z'
+        )
       })
 
       const two = this.full.filter((el) => {
         return (
-          el.Province === this.stateTwo && el.Date > '2020-02-15-T00:00:00Z'
+          el.Province === this.stateTwo &&
+          this.status === el.Status &&
+          el.Date > '2020-02-15-T00:00:00Z'
         )
       })
 
       const three = this.full.filter((el) => {
         return (
-          el.Province === this.stateThree && el.Date > '2020-02-15-T00:00:00Z'
+          el.Province === this.stateThree &&
+          this.status === el.Status &&
+          el.Date > '2020-02-15-T00:00:00Z'
         )
       })
 
       const four = this.full.filter((el) => {
         return (
-          el.Province === this.stateFour && el.Date > '2020-02-15-T00:00:00Z'
+          el.Province === this.stateFour &&
+          this.status === el.Status &&
+          el.Date > '2020-02-15-T00:00:00Z'
         )
       })
 
       const five = this.full.filter((el) => {
         return (
-          el.Province === this.stateFive && el.Date > '2020-02-15-T00:00:00Z'
+          el.Province === this.stateFive &&
+          this.status === el.Status &&
+          el.Date > '2020-02-15-T00:00:00Z'
         )
       })
 
@@ -475,8 +524,11 @@ export default {
         labels: days,
         datasets: [
           {
-            backgroundColor: `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 0.08)`,
-            label: `${this.state} / confirmed - per ${this.perPop.replace(
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 0.08)`
+                : `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
+            label: `${this.state} / ${this.status} - per ${this.perPop.replace(
               /(\d)(?=(\d{3})+(?!\d))/g,
               '$1,'
             )} pop - ${DAYS} day average`,
@@ -484,8 +536,13 @@ export default {
           },
           {
             fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`,
-            label: `${this.stateTwo} /confirmed - per ${this.perPop.replace(
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`
+                : `rgba(${this.colors[3][0]}, ${this.colors[3][1]}, ${this.colors[3][2]}, 0.08)`,
+            label: `${this.stateTwo} / ${
+              this.status
+            } - per ${this.perPop.replace(
               /(\d)(?=(\d{3})+(?!\d))/g,
               '$1,'
             )} pop - ${DAYS} day average`,
@@ -493,8 +550,13 @@ export default {
           },
           {
             fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[4][0]}, ${this.colors[4][1]}, ${this.colors[4][2]}, 0.08)`,
-            label: `${this.stateThree} / confirmed - per ${this.perPop.replace(
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.colors[4][0]}, ${this.colors[4][1]}, ${this.colors[4][2]}, 0.08)`
+                : `rgba(${this.colors[5][0]}, ${this.colors[5][1]}, ${this.colors[5][2]}, 0.08)`,
+            label: `${this.stateThree} / ${
+              this.status
+            } - per ${this.perPop.replace(
               /(\d)(?=(\d{3})+(?!\d))/g,
               '$1,'
             )} pop - ${DAYS} day average`,
@@ -502,8 +564,13 @@ export default {
           },
           {
             fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[6][0]}, ${this.colors[6][1]}, ${this.colors[6][2]}, 0.08)`,
-            label: `${this.stateFour} / confirmed - per ${this.perPop.replace(
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.colors[6][0]}, ${this.colors[6][1]}, ${this.colors[6][2]}, 0.08)`
+                : `rgba(${this.colors[7][0]}, ${this.colors[7][1]}, ${this.colors[7][2]}, 0.08)`,
+            label: `${this.stateFour} / ${
+              this.status
+            } - per ${this.perPop.replace(
               /(\d)(?=(\d{3})+(?!\d))/g,
               '$1,'
             )} pop - ${DAYS} day average`,
@@ -511,8 +578,13 @@ export default {
           },
           {
             fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[8][0]}, ${this.colors[8][1]}, ${this.colors[8][2]}, 0.08)`,
-            label: `${this.stateFive} / confirmed - per ${this.perPop.replace(
+            backgroundColor:
+              this.status === 'confirmed'
+                ? `rgba(${this.colors[8][0]}, ${this.colors[8][1]}, ${this.colors[8][2]}, 0.08)`
+                : `rgba(${this.colors[9][0]}, ${this.colors[9][1]}, ${this.colors[9][2]}, 0.08)`,
+            label: `${this.stateFive} / ${
+              this.status
+            } - per ${this.perPop.replace(
               /(\d)(?=(\d{3})+(?!\d))/g,
               '$1,'
             )} pop - ${DAYS} day average`,

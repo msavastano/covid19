@@ -29,11 +29,11 @@
       <v-toolbar-title v-text="title" />
       <v-spacer />
     </v-app-bar>
-    <v-content>
+    <v-main>
       <v-container>
         <nuxt />
       </v-container>
-    </v-content>
+    </v-main>
     <v-footer :fixed="fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
@@ -53,25 +53,30 @@ export default {
           title: 'Welcome',
           to: '/'
         },
-        {
-          icon: 'mdi-octagram',
-          title: 'Global Covid',
-          to: '/global-covid'
-        },
-        {
-          icon: 'mdi-chart-areaspline',
-          title: 'Global Chart',
-          to: '/global-chart'
-        },
-        {
-          icon: 'mdi-star',
-          title: 'US Covid',
-          to: '/us-covid'
-        },
+        // {
+        //   icon: 'mdi-octagram',
+        //   title: 'Global Covid',
+        //   to: '/global-covid'
+        // },
+        // {
+        //   icon: 'mdi-chart-areaspline',
+        //   title: 'Global Chart',
+        //   to: '/global-chart'
+        // },
+        // {
+        //   icon: 'mdi-star',
+        //   title: 'US Covid',
+        //   to: '/us-covid'
+        // },
         {
           icon: 'mdi-chart-line-variant',
           title: 'US Chart',
           to: '/us-chart'
+        },
+        {
+          icon: 'mdi-check-all',
+          title: 'US Testing Chart',
+          to: '/us-testing'
         }
       ],
       miniVariant: false,

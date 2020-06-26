@@ -12,16 +12,6 @@
             @change="submit"
           ></v-select>
           <v-select
-            v-model="state"
-            outlined
-            class="mx-2"
-            :items="StateNames"
-            label="State"
-            @change="submit"
-          ></v-select>
-        </v-col>
-        <v-col class="d-flex" cols="12">
-          <v-select
             v-model="stateThree"
             outlined
             class="mx-2"
@@ -38,23 +28,21 @@
             @change="submit"
           ></v-select>
         </v-col>
-        <v-col class="d-flex" cols="6">
+        <v-col class="d-flex" cols="12">
           <v-select
-            v-model="stateFive"
+            v-model="state"
             outlined
             class="mx-2"
             :items="StateNames"
             label="State"
             @change="submit"
           ></v-select>
-        </v-col>
-        <v-col class="d-flex" cols="10">
           <v-select
-            v-model="status"
+            v-model="stateFive"
             outlined
             class="mx-2"
-            :items="statuses"
-            label="Status"
+            :items="StateNames"
+            label="State"
             @change="submit"
           ></v-select>
         </v-col>
@@ -75,24 +63,22 @@ export default {
     LineChart
   },
   async asyncData(context) {
+    const colors = []
+    for (let i = 0; i < 10; i++) {
+      const rbg = []
+      for (let j = 0; j < 3; j++) {
+        rbg.push(Math.floor(Math.random() * 254 + 1).toString())
+      }
+      colors.push(rbg)
+    }
     const conNew = await axios.get(
       'https://api.covid19api.com/dayone/country/us/status/confirmed'
     )
-
-    const deaNew = await axios.get(
-      'https://api.covid19api.com/dayone/country/us/status/deaths'
-    )
-
-    const dateDea = groupBy(deaNew.data, 'Province')
 
     const dateCon = groupBy(conNew.data, 'Province')
 
     const stateCon = Object.keys(dateCon).map((key) => {
       return groupBy(dateCon[key], 'Date')
-    })
-
-    const stateDea = Object.keys(dateDea).map((key) => {
-      return groupBy(dateDea[key], 'Date')
     })
 
     let aggCon = stateCon.map((state) => {
@@ -112,245 +98,280 @@ export default {
 
     aggCon = [].concat(...aggCon)
 
-    let aggDea = stateDea.map((state) => {
-      let cs
-      return Object.keys(state).map((date, i) => {
-        cs = sumBy(state[date], (o) => {
-          return o.Cases
-        })
-        return {
-          Province: state[date][0].Province,
-          Status: 'deaths',
-          Date: state[date][0].Date,
-          Cases: cs
-        }
-      })
-    })
-
-    aggDea = [].concat(...aggDea)
-
-    const full = aggCon.concat(aggDea)
+    const full = aggCon
 
     return {
-      full
+      full,
+      colors
     }
   },
   data() {
     return {
-      statuses: ['deaths', 'confirmed'],
-      status: 'confirmed',
       datacollection: { labels: [], datasets: [] },
       states: [
         {
           name: 'Alabama',
-          pop: 4903185
+          pop: 4903185,
+          abbr: 'AL'
         },
         {
           name: 'Alaska',
-          pop: 731545
+          pop: 731545,
+          abbr: 'AK'
         },
         {
           name: 'Arizona',
-          pop: 7278717
+          pop: 7278717,
+          abbr: 'AZ'
         },
         {
           name: 'Arkansas',
-          pop: 3017825
+          pop: 3017825,
+          abbr: 'AR'
         },
         {
           name: 'California',
-          pop: 39512223
+          pop: 39512223,
+          abbr: 'CA'
         },
         {
           name: 'Colorado',
-          pop: 5758736
+          pop: 5758736,
+          abbr: 'CO'
         },
         {
           name: 'Connecticut',
-          pop: 3565287
+          pop: 3565287,
+          abbr: 'CT'
         },
         {
           name: 'Delaware',
-          pop: 973764
+          pop: 973764,
+          abbr: 'DE'
         },
         {
           name: 'District of Columbia',
-          pop: 705749
+          pop: 705749,
+          abbr: 'DC'
         },
         {
           name: 'Florida',
-          pop: 21477737
+          pop: 21477737,
+          abbr: 'FL'
         },
         {
           name: 'Georgia',
-          pop: 10617423
+          pop: 10617423,
+          abbr: 'GA'
         },
         {
           name: 'Hawaii',
-          pop: 1415872
+          pop: 1415872,
+          abbr: 'HI'
         },
         {
           name: 'Idaho',
-          pop: 1787147
+          pop: 1787147,
+          abbr: 'ID'
         },
         {
           name: 'Illinois',
-          pop: 12671821
+          pop: 12671821,
+          abbr: 'IL'
         },
         {
           name: 'Indiana',
-          pop: 6732219
+          pop: 6732219,
+          abbr: 'IN'
         },
         {
           name: 'Iowa',
-          pop: 3155070
+          pop: 3155070,
+          abbr: ''
         },
         {
           name: 'Kansas',
-          pop: 2913314
+          pop: 2913314,
+          abbr: 'KS'
         },
         {
           name: 'Kentucky',
-          pop: 4467673
+          pop: 4467673,
+          abbr: 'KY'
         },
         {
           name: 'Louisiana',
-          pop: 4648794
+          pop: 4648794,
+          abbr: 'LA'
         },
         {
           name: 'Maine',
-          pop: 1344212
+          pop: 1344212,
+          abbr: 'ME'
         },
         {
           name: 'Maryland',
-          pop: 6045680
+          pop: 6045680,
+          abbr: 'MD'
         },
         {
           name: 'Massachusetts',
-          pop: 6949503
+          pop: 6949503,
+          abbr: 'MA'
         },
         {
           name: 'Michigan',
-          pop: 9986857
+          pop: 9986857,
+          abbr: 'MI'
         },
         {
           name: 'Minnesota',
-          pop: 5639632
+          pop: 5639632,
+          abbr: 'MN'
         },
         {
           name: 'Mississippi',
-          pop: 2976149
+          pop: 2976149,
+          abbr: 'MS'
         },
         {
           name: 'Missouri',
-          pop: 6137428
+          pop: 6137428,
+          abbr: 'MO'
         },
         {
           name: 'Montana',
-          pop: 1068778
+          pop: 1068778,
+          abbr: 'MT'
         },
         {
           name: 'Nebraska',
-          pop: 1934408
+          pop: 1934408,
+          abbr: 'NE'
         },
         {
           name: 'Nevada',
-          pop: 3080156
+          pop: 3080156,
+          abbr: 'NV'
         },
         {
           name: 'New Hampshire',
-          pop: 1359711
+          pop: 1359711,
+          abbr: 'NH'
         },
         {
           name: 'New Jersey',
-          pop: 8882190
+          pop: 8882190,
+          abbr: 'NJ'
         },
         {
           name: 'New Mexico',
-          pop: 2096829
+          pop: 2096829,
+          abbr: 'NM'
         },
         {
           name: 'New York',
-          pop: 19453561
+          pop: 19453561,
+          abbr: 'NY'
         },
         {
           name: 'North Carolina',
-          pop: 10488084
+          pop: 10488084,
+          abbr: 'NC'
         },
         {
           name: 'North Dakota',
-          pop: 762062
+          pop: 762062,
+          abbr: 'ND'
         },
         {
           name: 'Ohio',
-          pop: 11689100
+          pop: 11689100,
+          abbr: 'OH'
         },
         {
           name: 'Oklahoma',
-          pop: 3956971
+          pop: 3956971,
+          abbr: 'OK'
         },
         {
           name: 'Oregon',
-          pop: 4217737
+          pop: 4217737,
+          abbr: 'OR'
         },
         {
           name: 'Pennsylvania',
-          pop: 12801989
+          pop: 12801989,
+          abbr: 'PA'
         },
         {
           name: 'Rhode Island',
-          pop: 1059361
+          pop: 1059361,
+          abbr: 'RI'
         },
         {
           name: 'South Carolina',
-          pop: 5148714
+          pop: 5148714,
+          abbr: 'SC'
         },
         {
           name: 'South Dakota',
-          pop: 884659
+          pop: 884659,
+          abbr: 'SD'
         },
         {
           name: 'Tennessee',
-          pop: 6833174
+          pop: 6833174,
+          abbr: 'TN'
         },
         {
           name: 'Texas',
-          pop: 28995881
+          pop: 28995881,
+          abbr: 'TX'
         },
         {
           name: 'Utah',
-          pop: 3205958
+          pop: 3205958,
+          abbr: 'UT'
         },
         {
           name: 'Vermont',
-          pop: 623989
+          pop: 623989,
+          abbr: 'VT'
         },
         {
           name: 'Virginia',
-          pop: 8535519
+          pop: 8535519,
+          abbr: 'VA'
         },
         {
           name: 'Washington',
-          pop: 7614893
+          pop: 7614893,
+          abbr: 'WA'
         },
         {
           name: 'West Virginia',
-          pop: 1792065
+          pop: 1792065,
+          abbr: 'WV'
         },
         {
           name: 'Wisconsin',
-          pop: 5822434
+          pop: 5822434,
+          abbr: 'WI'
         },
         {
           name: 'Wyoming',
-          pop: 578759
+          pop: 578759,
+          abbr: 'WY'
         }
       ],
       state: 'New York',
       stateTwo: 'New Jersey',
       stateThree: 'Rhode Island',
       stateFour: 'Massachusetts',
-      stateFive: 'Connecticut'
+      stateFive: 'Connecticut',
+      rollDays: '7',
+      testing: []
     }
   },
   computed: {
@@ -364,29 +385,43 @@ export default {
     this.fillData()
   },
   methods: {
-    getData(d, pop, DAYS) {
+    getData(d, abbr, DAYS) {
       const casesArr = []
       const datesArr = []
       if (d && Array.isArray(d)) {
         d.forEach((element, i) => {
-          const prev = i - 1
+          const tests = this.testing.data.find((t) => {
+            return (
+              t.dateChecked > '2020-04-10-T00:00:00Z' &&
+              t.dateChecked.substr(0, 10) === element.Date.substr(0, 10) &&
+              t.state === abbr
+            )
+          })
           if (i !== 0) {
-            element.newCases = element.Cases - d[prev].Cases
+            element.newCases = element.Cases - d[i - 1].Cases
           } else {
             element.newCases = 0
           }
-
-          if (i > DAYS) {
+          let testsAddedAve = 0
+          if (i >= 0) {
             let added = 0
-            for (let j = 1; j < DAYS + 1; j++) {
+            let testsAdded = 0
+            for (let j = 0; j < DAYS && i - j >= 0; j++) {
               added = added + d[i - j].newCases
+              testsAdded = tests
+                ? testsAdded + this.testing.data[i - j].totalTestResultsIncrease
+                : 0
             }
-            element.newCasesAve = added / DAYS
+            const denom = i + 1 < DAYS ? i + 1 : DAYS
+            element.newCasesAve = added / denom
+            testsAddedAve = testsAdded / denom
           } else {
             element.newCasesAve = 0
           }
+          console.log('test', testsAddedAve)
+          console.log('case', element.newCasesAve)
           const norm =
-            Math.round((element.newCasesAve / pop) * 1000000 * 100) / 100
+            Math.round((testsAddedAve / element.newCasesAve) * 100) / 100
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
@@ -399,52 +434,73 @@ export default {
     submit() {
       this.fillData()
     },
-    random() {
-      return Math.floor(Math.random() * 254 + 1).toString()
-    },
-    fillData() {
-      const DAYS = 14
+    async fillData() {
+      this.testing = await axios.get(
+        'https://covidtracking.com/api/v1/states/daily.json'
+      )
+      console.log(this.testing[300])
+      const DAYS = parseInt(this.rollDays)
       const one = this.full.filter((el) => {
-        return el.Province === this.state && this.status === el.Status
+        return (
+          el.Province === this.state &&
+          el.Status === 'confirmed' &&
+          el.Date > '2020-04-10-T00:00:00Z'
+        )
       })
 
       const two = this.full.filter((el) => {
-        return el.Province === this.stateTwo && this.status === el.Status
+        return (
+          el.Province === this.stateTwo &&
+          el.Status === 'confirmed' &&
+          el.Date > '2020-04-10-T00:00:00Z'
+        )
       })
 
       const three = this.full.filter((el) => {
-        return el.Province === this.stateThree && this.status === el.Status
+        return (
+          el.Province === this.stateThree &&
+          el.Status === 'confirmed' &&
+          el.Date > '2020-04-10-T00:00:00Z'
+        )
       })
 
       const four = this.full.filter((el) => {
-        return el.Province === this.stateFour && this.status === el.Status
+        return (
+          el.Province === this.stateFour &&
+          el.Status === 'confirmed' &&
+          el.Date > '2020-04-10-T00:00:00Z'
+        )
       })
 
       const five = this.full.filter((el) => {
-        return el.Province === this.stateFive && this.status === el.Status
+        return (
+          el.Province === this.stateFive &&
+          el.Status === 'confirmed' &&
+          el.Date > '2020-04-10-T00:00:00Z'
+        )
       })
 
-      const pop = this.states.find((st) => {
+      const abbr = this.states.find((st) => {
         return st.name === this.state
-      }).pop
-      const popTwo = this.states.find((st) => {
+      }).abbr
+      const abbrTwo = this.states.find((st) => {
         return st.name === this.stateTwo
-      }).pop
-      const popThree = this.states.find((st) => {
+      }).abbr
+      const abbrThree = this.states.find((st) => {
         return st.name === this.stateThree
-      }).pop
-      const popFour = this.states.find((st) => {
+      }).abbr
+      const abbrFour = this.states.find((st) => {
         return st.name === this.stateFour
-      }).pop
-      const popFive = this.states.find((st) => {
+      }).abbr
+      const abbrFive = this.states.find((st) => {
         return st.name === this.stateFive
-      }).pop
+      }).abbr
 
-      const casesArrOne = this.getData(one, pop, DAYS)
-      const casesArrTwo = this.getData(two, popTwo, DAYS)
-      const casesArrThree = this.getData(three, popThree, DAYS)
-      const casesArrFour = this.getData(four, popFour, DAYS)
-      const casesArrFive = this.getData(five, popFive, DAYS)
+      const casesArrOne = this.getData(one, abbr, DAYS)
+      const casesArrTwo = this.getData(two, abbrTwo, DAYS)
+      const casesArrThree = this.getData(three, abbrThree, DAYS)
+      const casesArrFour = this.getData(four, abbrFour, DAYS)
+      const casesArrFive = this.getData(five, abbrFive, DAYS)
 
       const container = []
 
@@ -461,57 +517,37 @@ export default {
       })
 
       const days = container[0].datesArr
-      for (let k = 1; k < 5; k++) {
-        const diff = container[0].casesArr.length - container[k].casesArr.length
-        for (let l = 0; l < diff; l++) {
-          container[k].casesArr.unshift(0)
-        }
-      }
+
       this.datacollection = {
         labels: days,
         datasets: [
           {
-            backgroundColor:
-              this.status === 'confirmed'
-                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
-                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
-            label: `${this.state} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
+            label: `${this.state} / tests : cases - ${DAYS} day average`,
             data: casesArrOne.casesArr
           },
           {
             fillOpacity: 0.3,
-            backgroundColor:
-              this.status === 'confirmed'
-                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
-                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
-            label: `${this.stateTwo} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            backgroundColor: `rgba(${this.colors[3][0]}, ${this.colors[3][1]}, ${this.colors[3][2]}, 0.08)`,
+            label: `${this.stateTwo} / tests : cases - ${DAYS} day average`,
             data: casesArrTwo.casesArr
           },
           {
             fillOpacity: 0.3,
-            backgroundColor:
-              this.status === 'confirmed'
-                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
-                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
-            label: `${this.stateThree} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            backgroundColor: `rgba(${this.colors[5][0]}, ${this.colors[5][1]}, ${this.colors[5][2]}, 0.08)`,
+            label: `${this.stateThree} / tests : cases  - ${DAYS} day average`,
             data: casesArrThree.casesArr
           },
           {
             fillOpacity: 0.3,
-            backgroundColor:
-              this.status === 'confirmed'
-                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
-                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
-            label: `${this.stateFour} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            backgroundColor: `rgba(${this.colors[7][0]}, ${this.colors[7][1]}, ${this.colors[7][2]}, 0.08)`,
+            label: `${this.stateFour} / tests : cases - ${DAYS} day average`,
             data: casesArrFour.casesArr
           },
           {
             fillOpacity: 0.3,
-            backgroundColor:
-              this.status === 'confirmed'
-                ? `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`
-                : `rgba(${this.random()}, ${this.random()}, ${this.random()}, 0.08)`,
-            label: `${this.stateFive} / ${this.status} - per 100,000 pop - ${DAYS} day average`,
+            backgroundColor: `rgba(${this.colors[9][0]}, ${this.colors[9][1]}, ${this.colors[9][2]}, 0.08)`,
+            label: `${this.stateFive} / tests : cases - ${DAYS} day average`,
             data: casesArrFive.casesArr
           }
         ]

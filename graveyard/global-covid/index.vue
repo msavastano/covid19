@@ -76,7 +76,7 @@ export default {
   methods: {
     async submit() {
       const { data } = await axios.get(
-        `https://api.covid19api.com/total/dayone/country/${this.CountrySlug}/status/${this.status}`
+        `https://api.covid19api.com/total/country/${this.CountrySlug}/status/${this.status}`
       )
 
       const d = Array.isArray(data)

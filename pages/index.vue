@@ -51,7 +51,7 @@
             v-model="perPop"
             outlined
             class="mx-2"
-            :items="['1,000,000', '100,000', '10,000']"
+            :items="['1,000,000', 'Full']"
             label="Per Population"
             @change="submit"
           ></v-select>
@@ -332,13 +332,13 @@ export default {
           pop: 578759
         }
       ],
-      state: 'New York',
-      stateTwo: 'New Jersey',
-      stateThree: 'Rhode Island',
-      stateFour: 'Massachusetts',
-      stateFive: 'Connecticut',
-      perPop: '100,000',
-      rollDays: '14'
+      state: 'California',
+      stateTwo: 'Texas',
+      stateThree: 'South Carolina',
+      stateFour: 'Florida',
+      stateFive: 'Arizona',
+      perPop: '1,000,000',
+      rollDays: '7'
     }
   },
   computed: {
@@ -374,8 +374,9 @@ export default {
           } else {
             element.newCasesAve = 0
           }
-          const norm =
-            Math.round((element.newCasesAve / pop) * perPop * 100) / 100
+          const norm = isNaN(perPop)
+            ? Math.round(element.newCasesAve)
+            : Math.round((element.newCasesAve / pop) * perPop * 100) / 100
           casesArr.push(norm)
           datesArr.push(element.Date.substr(5, 5))
         })
@@ -476,46 +477,31 @@ export default {
         datasets: [
           {
             backgroundColor: `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 0.08)`,
-            label: `${this.state} / confirmed - per ${this.perPop.replace(
-              /(\d)(?=(\d{3})+(?!\d))/g,
-              '$1,'
-            )} pop - ${DAYS} day average`,
+            label: `${this.state} / confirmed`,
             data: casesArrOne.casesArr
           },
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`,
-            label: `${this.stateTwo} /confirmed - per ${this.perPop.replace(
-              /(\d)(?=(\d{3})+(?!\d))/g,
-              '$1,'
-            )} pop - ${DAYS} day average`,
+            label: `${this.stateTwo} / confirmed`,
             data: casesArrTwo.casesArr
           },
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[4][0]}, ${this.colors[4][1]}, ${this.colors[4][2]}, 0.08)`,
-            label: `${this.stateThree} / confirmed - per ${this.perPop.replace(
-              /(\d)(?=(\d{3})+(?!\d))/g,
-              '$1,'
-            )} pop - ${DAYS} day average`,
+            label: `${this.stateThree} / confirmed`,
             data: casesArrThree.casesArr
           },
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[6][0]}, ${this.colors[6][1]}, ${this.colors[6][2]}, 0.08)`,
-            label: `${this.stateFour} / confirmed - per ${this.perPop.replace(
-              /(\d)(?=(\d{3})+(?!\d))/g,
-              '$1,'
-            )} pop - ${DAYS} day average`,
+            label: `${this.stateFour} / confirmed`,
             data: casesArrFour.casesArr
           },
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[8][0]}, ${this.colors[8][1]}, ${this.colors[8][2]}, 0.08)`,
-            label: `${this.stateFive} / confirmed - per ${this.perPop.replace(
-              /(\d)(?=(\d{3})+(?!\d))/g,
-              '$1,'
-            )} pop - ${DAYS} day average`,
+            label: `${this.stateFive} / confirmed`,
             data: casesArrFive.casesArr
           }
         ]

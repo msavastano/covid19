@@ -52,7 +52,7 @@ export default {
           icon: 'mdi-apps',
           title: 'Welcome',
           to: '/'
-        },
+        }
         // {
         //   icon: 'mdi-octagram',
         //   title: 'Global Covid',
@@ -68,16 +68,16 @@ export default {
         //   title: 'US Covid',
         //   to: '/us-covid'
         // },
-        {
-          icon: 'mdi-chart-line-variant',
-          title: 'US Chart',
-          to: '/us-chart'
-        },
-        {
-          icon: 'mdi-check-all',
-          title: 'US Testing Chart',
-          to: '/us-testing'
-        }
+        // {
+        //   icon: 'mdi-chart-line-variant',
+        //   title: 'US Chart',
+        //   to: '/us-chart'
+        // },
+        // {
+        //   icon: 'mdi-check-all',
+        //   title: 'US Testing Chart',
+        //   to: '/us-testing'
+        // }
       ],
       miniVariant: false,
       title: 'Covid-19'

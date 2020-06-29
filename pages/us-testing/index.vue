@@ -301,7 +301,7 @@ export default {
           abbr: 'WY'
         }
       ],
-      state: 'New York',
+      state: 'Arizona',
       rollDays: '7',
       testing: []
     }
@@ -327,9 +327,6 @@ export default {
       const testing = await axios.get(
         'https://covidtracking.com/api/v1/states/daily.json'
       )
-      const pop = this.states.find((st) => {
-        return st.name === this.state
-      }).pop
       const abbr = this.states.find((st) => {
         return st.name === this.state
       }).abbr
@@ -337,26 +334,41 @@ export default {
       const one = testing.data.filter((el) => {
         return el.state === abbr
       })
-      console.log(one)
 
       const days = one
         .map((e) => {
-          return e.dateChecked.substr(0, 10)
+          const date = String(e.date).slice(4)
+          const dateArr = date.split('')
+          dateArr.splice(2, 0, '-')
+          return dateArr.join('')
         })
         .reverse()
-      let previousHosp
+
+      let prevTotalTestResultsIncrease
+      let prevPositiveIncrease
       const hosp = one
         .map((e, i) => {
-          // return e.hospitalizedCurrently
-          let hosps
-          if (!e.hospitalizedCurrently || e.hospitalizedCurrently < 0) {
-            hosps = previousHosp
+          let totalTestResultsIncrease
+          if (!e.totalTestResultsIncrease || e.totalTestResultsIncrease < 0) {
+            totalTestResultsIncrease = prevTotalTestResultsIncrease
           } else {
-            previousHosp = e.hospitalizedCurrently
-            hosps = e.hospitalizedCurrently
+            totalTestResultsIncrease = e.totalTestResultsIncrease
+            prevTotalTestResultsIncrease = e.totalTestResultsIncrease
           }
-          console.log(hosps)
-          return Math.round((hosps / pop) * 100000 * 100) / 100
+
+          let positiveIncrease
+          if (!e.positiveIncrease || e.positiveIncrease < 0) {
+            positiveIncrease = prevPositiveIncrease
+          } else {
+            positiveIncrease = e.positiveIncrease
+            prevPositiveIncrease = e.positiveIncrease
+          }
+
+          return (
+            (Math.round((positiveIncrease / totalTestResultsIncrease) * 1000) /
+              1000) *
+            100
+          )
         })
         .reverse()
       this.datacollection = {
@@ -365,7 +377,7 @@ export default {
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
-            label: `${this.state} / hospitalizations - per 100,000 pop - ${DAYS} day average`,
+            label: `${this.state} - ${DAYS} day average of positive test rates`,
             data: hosp
           }
         ]

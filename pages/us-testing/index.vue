@@ -21,14 +21,16 @@
 
 <script>
 import axios from 'axios'
-// import { groupBy, sumBy } from 'lodash'
 import LineChart from '@/components/LineChart.vue'
 
 export default {
   components: {
     LineChart
   },
-  asyncData(context) {
+  async asyncData(context) {
+    const tests = await axios.get(
+      'https://covidtracking.com/api/v1/states/daily.json'
+    )
     const colors = []
     for (let i = 0; i < 10; i++) {
       const rbg = []
@@ -38,7 +40,8 @@ export default {
       colors.push(rbg)
     }
     return {
-      colors
+      colors,
+      tests
     }
   },
   data() {
@@ -323,15 +326,14 @@ export default {
     submit() {
       this.fillData()
     },
-    async fillData() {
-      const testing = await axios.get(
-        'https://covidtracking.com/api/v1/states/daily.json'
-      )
+    fillData() {
+      const DAYS = parseInt(this.rollDays)
+
       const abbr = this.states.find((st) => {
         return st.name === this.state
       }).abbr
-      const DAYS = parseInt(this.rollDays)
-      const one = testing.data.filter((el) => {
+
+      const one = this.tests.data.filter((el) => {
         return el.state === abbr
       })
 

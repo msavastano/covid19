@@ -11,6 +11,15 @@
             label="State"
             @change="submit"
           ></v-select>
+
+          <v-select
+            v-model="rollDays"
+            outlined
+            class="mx-2"
+            :items="['1', '3', '7', '14']"
+            label="Rolling days"
+            @change="submit"
+          ></v-select>
         </v-col>
       </v-row>
     </v-container>
@@ -328,7 +337,8 @@ export default {
         }
       ],
       state: 'Arizona',
-      testing: []
+      testing: [],
+      rollDays: '7'
     }
   },
   computed: {
@@ -342,10 +352,33 @@ export default {
     this.fillData()
   },
   methods: {
+    getData(d, DAYS) {
+      const casesArr = []
+      let newCasesAve
+      if (d && Array.isArray(d)) {
+        d.forEach((element, i) => {
+          if (i > DAYS) {
+            let added = 0
+            for (let j = 0; j < DAYS; j++) {
+              added = added + d[i - j]
+            }
+            newCasesAve = added / DAYS
+          } else {
+            newCasesAve = 0
+          }
+          const norm = Math.round(newCasesAve * 100) / 100
+          casesArr.push(norm)
+        })
+      }
+      return {
+        casesArr
+      }
+    },
     submit() {
       this.fillData()
     },
     fillData() {
+      const DAYS = parseInt(this.rollDays)
       const abbr = this.states.find((st) => {
         return st.name === this.state
       }).abbr
@@ -389,7 +422,7 @@ export default {
           )
         })
         .reverse()
-
+      const rollingPosTestRate = this.getData(posTestRate, DAYS)
       const posTest = one
         .map((e, i) => {
           let positiveIncrease
@@ -402,7 +435,7 @@ export default {
           return positiveIncrease
         })
         .reverse()
-
+      const rollingPosTest = this.getData(posTest, DAYS)
       this.datacollection = {
         labels: days,
         datasets: [
@@ -410,14 +443,14 @@ export default {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
             label: `${this.state} - Positive test rates`,
-            data: posTestRate
+            data: rollingPosTestRate.casesArr
           },
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`,
             label: `${this.state} - Confirmed Cases`,
             yAxisID: 'y-axis-2',
-            data: posTest
+            data: rollingPosTest.casesArr
           }
         ]
       }

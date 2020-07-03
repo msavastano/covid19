@@ -106,10 +106,14 @@ export default {
         cs = sumBy(state[date], (o) => {
           return o.positiveIncrease
         })
+        const dateString = String(state[date][0].date).slice(4)
+        let Date = dateString.split('')
+        Date.splice(2, 0, '-')
+        Date = Date.join('')
         return {
           state: state[date][0].state,
           Status: 'confirmed',
-          Date: state[date][0].date,
+          Date,
           Cases: cs
         }
       })
@@ -421,7 +425,7 @@ export default {
             ? Math.round(element.newCasesAve)
             : Math.round((element.newCasesAve / pop) * perPop * 100) / 100
           casesArr.push(norm)
-          datesArr.push(String(element.Date))
+          datesArr.push(element.Date)
         })
       }
       return {

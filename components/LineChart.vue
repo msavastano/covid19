@@ -9,7 +9,23 @@ export default {
       datasets: this.chartData,
       options: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [
+            {
+              id: 'yaxisA',
+              type: 'linear',
+              position: 'left',
+              display: true
+            },
+            {
+              id: 'yaxisB',
+              type: 'linear',
+              position: 'right',
+              display: true
+            }
+          ]
+        }
       }
     })
   }

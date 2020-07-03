@@ -305,7 +305,6 @@ export default {
         }
       ],
       state: 'Arizona',
-      rollDays: '7',
       testing: []
     }
   },
@@ -320,15 +319,10 @@ export default {
     this.fillData()
   },
   methods: {
-    getData(d, abbr, DAYS) {
-      return {}
-    },
     submit() {
       this.fillData()
     },
     fillData() {
-      const DAYS = parseInt(this.rollDays)
-
       const abbr = this.states.find((st) => {
         return st.name === this.state
       }).abbr
@@ -365,7 +359,6 @@ export default {
             positiveIncrease = e.positiveIncrease
             prevPositiveIncrease = e.positiveIncrease
           }
-
           return (
             (Math.round((positiveIncrease / totalTestResultsIncrease) * 1000) /
               1000) *
@@ -380,7 +373,7 @@ export default {
           {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
-            label: `${this.state} - ${DAYS} day average of positive test rates`,
+            label: `${this.state} - Positive test rates`,
             data: hosp,
             yAxisID: 'yaxisA'
           },

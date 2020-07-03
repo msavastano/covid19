@@ -410,7 +410,7 @@ export default {
         d.forEach((element, i) => {
           if (i > DAYS) {
             let added = 0
-            for (let j = 1; j < DAYS + 1; j++) {
+            for (let j = 0; j < DAYS; j++) {
               added = added + d[i - j].Cases
             }
             element.newCasesAve = added / DAYS

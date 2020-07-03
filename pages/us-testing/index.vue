@@ -74,6 +74,15 @@ export default {
                 display: true,
                 labelString: 'Confirmed Cases'
               }
+            },
+            {
+              id: 'y-axis-3',
+              display: true,
+              position: 'right',
+              scaleLabel: {
+                display: true,
+                labelString: 'Total Tests'
+              }
             }
           ]
         }
@@ -423,19 +432,37 @@ export default {
         })
         .reverse()
       const rollingPosTestRate = this.getData(posTestRate, DAYS)
+
+      let prevPositiveIncrease2
       const posTest = one
         .map((e, i) => {
           let positiveIncrease
           if (!e.positiveIncrease || e.positiveIncrease < 0) {
-            positiveIncrease = prevPositiveIncrease
+            positiveIncrease = prevPositiveIncrease2
           } else {
             positiveIncrease = e.positiveIncrease
-            prevPositiveIncrease = e.positiveIncrease
+            prevPositiveIncrease2 = e.positiveIncrease
           }
           return positiveIncrease
         })
         .reverse()
       const rollingPosTest = this.getData(posTest, DAYS)
+
+      let prevTotalTestResultsIncrease2
+      const totalTest = one
+        .map((e, i) => {
+          let totalTestResultsIncrease
+          if (!e.totalTestResultsIncrease || e.totalTestResultsIncrease < 0) {
+            totalTestResultsIncrease = prevTotalTestResultsIncrease2
+          } else {
+            totalTestResultsIncrease = e.totalTestResultsIncrease
+            prevTotalTestResultsIncrease2 = e.totalTestResultsIncrease
+          }
+          return totalTestResultsIncrease
+        })
+        .reverse()
+      const rollingTotalTest = this.getData(totalTest, DAYS)
+
       this.datacollection = {
         labels: days,
         datasets: [
@@ -451,6 +478,13 @@ export default {
             label: `${this.state} - Confirmed Cases`,
             yAxisID: 'y-axis-2',
             data: rollingPosTest.casesArr
+          },
+          {
+            fillOpacity: 0.3,
+            backgroundColor: `rgba(${this.colors[3][0]}, ${this.colors[3][1]}, ${this.colors[3][2]}, 0.08)`,
+            label: `${this.state} - Total Tests`,
+            yAxisID: 'y-axis-3',
+            data: rollingTotalTest.casesArr
           }
         ]
       }

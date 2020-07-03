@@ -67,7 +67,6 @@
       </v-row>
     </v-container>
     <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Line Chart</button>
   </div>
 </template>
 

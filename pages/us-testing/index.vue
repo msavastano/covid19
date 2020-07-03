@@ -15,7 +15,6 @@
       </v-row>
     </v-container>
     <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Line Chart</button>
   </div>
 </template>
 
@@ -375,11 +374,10 @@ export default {
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
             label: `${this.state} - Positive test rates`,
             data: hosp,
-            yAxisID: 'yaxisA'
+            yAxisID: 'y-axis-0'
           },
           {
             fillOpacity: 0.3,
-            yAxisID: 'yaxisB',
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
             label: 'B',
             data: [
@@ -512,7 +510,8 @@ export default {
               0.2,
               1,
               1
-            ]
+            ],
+            yAxisID: 'y-axis-0'
           }
         ]
       }

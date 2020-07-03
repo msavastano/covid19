@@ -4,13 +4,10 @@ const { reactiveProp } = mixins
 export default {
   extends: Line,
   mixins: [reactiveProp],
+  props: ['chartData', 'options'],
   mounted() {
     this.renderChart({
-      datasets: this.chartData,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+      datasets: this.chartData
     })
   }
 }

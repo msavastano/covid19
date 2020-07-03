@@ -67,7 +67,6 @@
       </v-row>
     </v-container>
     <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Line Chart</button>
   </div>
 </template>
 
@@ -425,7 +424,7 @@ export default {
             ? Math.round(element.newCasesAve)
             : Math.round((element.newCasesAve / pop) * perPop * 100) / 100
           casesArr.push(norm)
-          datesArr.push(String(element.Date))
+          datesArr.push(element.Date)
         })
       }
       return {

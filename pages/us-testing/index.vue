@@ -14,8 +14,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Line Chart</button>
+    <line-chart :chart-data="datacollection" :options="options"></line-chart>
   </div>
 </template>
 
@@ -46,6 +45,30 @@ export default {
   },
   data() {
     return {
+      options: {
+        scales: {
+          yAxes: [
+            {
+              id: 'y-axis-0',
+              display: true,
+              position: 'right',
+              scaleLabel: {
+                display: true,
+                labelString: 'Positive Test Rate'
+              }
+            },
+            {
+              id: 'y-axis-2',
+              display: true,
+              position: 'left',
+              scaleLabel: {
+                display: true,
+                labelString: 'Confirmed Cases'
+              }
+            }
+          ]
+        }
+      },
       datacollection: { labels: [], datasets: [] },
       states: [
         {
@@ -342,7 +365,7 @@ export default {
 
       let prevTotalTestResultsIncrease
       let prevPositiveIncrease
-      const hosp = one
+      const posTestRate = one
         .map((e, i) => {
           let totalTestResultsIncrease
           if (!e.totalTestResultsIncrease || e.totalTestResultsIncrease < 0) {
@@ -366,6 +389,20 @@ export default {
           )
         })
         .reverse()
+
+      const posTest = one
+        .map((e, i) => {
+          let positiveIncrease
+          if (!e.positiveIncrease || e.positiveIncrease < 0) {
+            positiveIncrease = prevPositiveIncrease
+          } else {
+            positiveIncrease = e.positiveIncrease
+            prevPositiveIncrease = e.positiveIncrease
+          }
+          return positiveIncrease
+        })
+        .reverse()
+
       this.datacollection = {
         labels: days,
         datasets: [
@@ -373,7 +410,14 @@ export default {
             fillOpacity: 0.3,
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 0.08)`,
             label: `${this.state} - Positive test rates`,
-            data: hosp
+            data: posTestRate
+          },
+          {
+            fillOpacity: 0.3,
+            backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`,
+            label: `${this.state} - Confirmed Cases`,
+            yAxisID: 'y-axis-2',
+            data: posTest
           }
         ]
       }

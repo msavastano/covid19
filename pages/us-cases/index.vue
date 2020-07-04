@@ -1,5 +1,5 @@
 <template>
-  <div class="small">
+  <div>
     <v-container fluid>
       <v-row align="center">
         <v-col class="d-flex" cols="12">
@@ -66,7 +66,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <line-chart :chart-data="datacollection"></line-chart>
+    <line-chart :chart-data="datacollection" :options="options"></line-chart>
   </div>
 </template>
 
@@ -127,6 +127,9 @@ export default {
   },
   data() {
     return {
+      options: {
+        maintainAspectRatio: false
+      },
       datacollection: { labels: [], datasets: [] },
       states: [
         {

@@ -1,5 +1,5 @@
 <template>
-  <div class="small">
+  <div>
     <v-container fluid>
       <v-row align="center">
         <v-col class="d-flex" cols="12">
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       options: {
+        maintainAspectRatio: false,
         scales: {
           yAxes: [
             {

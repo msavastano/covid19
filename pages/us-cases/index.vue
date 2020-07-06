@@ -128,7 +128,13 @@ export default {
   data() {
     return {
       options: {
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        legend: {
+          labels: {
+            boxWidth: 15,
+            usePointStyle: true
+          }
+        }
       },
       datacollection: { labels: [], datasets: [] },
       states: [
@@ -534,31 +540,37 @@ export default {
         labels: days,
         datasets: [
           {
-            backgroundColor: `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 0.08)`,
+            fillOpacity: 1,
+            backgroundColor: `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 1)`,
             label: `${this.state} / confirmed`,
+            fill: false,
             data: casesArrOne.casesArr
           },
           {
-            fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 0.08)`,
+            fillOpacity: 1,
+            fill: false,
+            backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 1)`,
             label: `${this.stateTwo} / confirmed`,
             data: casesArrTwo.casesArr
           },
           {
-            fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[4][0]}, ${this.colors[4][1]}, ${this.colors[4][2]}, 0.08)`,
+            fillOpacity: 1,
+            fill: false,
+            backgroundColor: `rgba(${this.colors[4][0]}, ${this.colors[4][1]}, ${this.colors[4][2]}, 1)`,
             label: `${this.stateThree} / confirmed`,
             data: casesArrThree.casesArr
           },
           {
-            fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[6][0]}, ${this.colors[6][1]}, ${this.colors[6][2]}, 0.08)`,
+            fillOpacity: 1,
+            fill: false,
+            backgroundColor: `rgba(${this.colors[6][0]}, ${this.colors[6][1]}, ${this.colors[6][2]}, 1)`,
             label: `${this.stateFour} / confirmed`,
             data: casesArrFour.casesArr
           },
           {
-            fillOpacity: 0.3,
-            backgroundColor: `rgba(${this.colors[8][0]}, ${this.colors[8][1]}, ${this.colors[8][2]}, 0.08)`,
+            fillOpacity: 1,
+            fill: false,
+            backgroundColor: `rgba(${this.colors[8][0]}, ${this.colors[8][1]}, ${this.colors[8][2]}, 1)`,
             label: `${this.stateFive} / confirmed`,
             data: casesArrFive.casesArr
           }

@@ -57,6 +57,11 @@ export default {
           icon: 'mdi-check-all',
           title: 'US Testing Rates',
           to: '/us-testing'
+        },
+        {
+          icon: 'mdi-chart-line-stacked',
+          title: 'US Deaths',
+          to: '/us-deaths'
         }
       ],
       miniVariant: false,

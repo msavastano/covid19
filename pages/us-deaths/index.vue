@@ -20,6 +20,15 @@
             label="Rolling days"
             @change="submit"
           ></v-select>
+
+          <v-select
+            v-model="hospDataType"
+            outlined
+            class="mx-2"
+            :items="['Daily Increase', 'Currently Hospitalized']"
+            label="Hospitalization Data Type"
+            @change="submit"
+          ></v-select>
         </v-col>
       </v-row>
     </v-container>
@@ -77,6 +86,9 @@ export default {
               id: 'y-axis-1',
               display: true,
               position: 'right',
+              gridLines: {
+                drawOnChartArea: false
+              },
               scaleLabel: {
                 display: true,
                 labelString: 'Hospitalizations'
@@ -135,8 +147,7 @@ export default {
         {
           name: 'Florida',
           pop: 21477737,
-          abbr: 'FL',
-          hosp: 'increase'
+          abbr: 'FL'
         },
         {
           name: 'Georgia',
@@ -146,8 +157,7 @@ export default {
         {
           name: 'Hawaii',
           pop: 1415872,
-          abbr: 'HI',
-          hosp: 'increase'
+          abbr: 'HI'
         },
         {
           name: 'Idaho',
@@ -167,8 +177,7 @@ export default {
         {
           name: 'Kansas',
           pop: 2913314,
-          abbr: 'KS',
-          hosp: 'increase'
+          abbr: 'KS'
         },
         {
           name: 'Kentucky',
@@ -343,7 +352,8 @@ export default {
       ],
       state: 'Arizona',
       testing: [],
-      rollDays: '7'
+      rollDays: '7',
+      hospDataType: 'Currently Hospitalized'
     }
   },
   computed: {
@@ -388,10 +398,6 @@ export default {
         return st.name === this.state
       }).abbr
 
-      const hosp = this.states.find((st) => {
-        return st.name === this.state
-      }).hosp
-
       const one = this.deaths.data.filter((el) => {
         return el.state === abbr
       })
@@ -425,7 +431,7 @@ export default {
       const rollingDeaths = this.getData(deaths, DAYS)
 
       let rollingHosps
-      if (hosp === 'increase') {
+      if (this.hospDataType === 'Daily Increase') {
         let prevHospsIncrease
         const hosps = one
           .map((e, i) => {
@@ -472,7 +478,7 @@ export default {
             fillOpacity: 1,
             yAxisID: 'y-axis-1',
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 1)`,
-            label: `${this.state} - Hospitalizations - ${hosp || 'current'}`,
+            label: `${this.state} - Hospitalizations - ${this.hospDataType}`,
             fill: false,
             data: rollingHosps
           }

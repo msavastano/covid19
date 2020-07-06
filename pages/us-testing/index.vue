@@ -178,11 +178,6 @@ export default {
           abbr: 'IN'
         },
         {
-          name: 'Iowa',
-          pop: 3155070,
-          abbr: ''
-        },
-        {
           name: 'Kansas',
           pop: 2913314,
           abbr: 'KS'

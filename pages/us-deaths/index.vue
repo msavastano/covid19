@@ -36,7 +36,7 @@ export default {
     LineChart
   },
   async asyncData(context) {
-    const tests = await axios.get(
+    const deaths = await axios.get(
       'https://covidtracking.com/api/v1/states/daily.json'
     )
     const colors = []
@@ -49,7 +49,7 @@ export default {
     }
     return {
       colors,
-      tests
+      deaths
     }
   },
   data() {
@@ -70,31 +70,16 @@ export default {
               position: 'right',
               scaleLabel: {
                 display: true,
-                labelString: 'Positive Test Rate'
+                labelString: 'Deaths'
               }
             },
             {
-              id: 'y-axis-2',
+              id: 'y-axis-1',
               display: true,
-              gridLines: {
-                drawOnChartArea: false
-              },
-              position: 'left',
-              scaleLabel: {
-                display: true,
-                labelString: 'Confirmed Cases'
-              }
-            },
-            {
-              id: 'y-axis-3',
-              display: true,
-              gridLines: {
-                drawOnChartArea: false
-              },
               position: 'right',
               scaleLabel: {
                 display: true,
-                labelString: 'Total Tests'
+                labelString: 'Hospitalizations'
               }
             }
           ]
@@ -150,7 +135,8 @@ export default {
         {
           name: 'Florida',
           pop: 21477737,
-          abbr: 'FL'
+          abbr: 'FL',
+          hosp: 'increase'
         },
         {
           name: 'Georgia',
@@ -160,7 +146,8 @@ export default {
         {
           name: 'Hawaii',
           pop: 1415872,
-          abbr: 'HI'
+          abbr: 'HI',
+          hosp: 'increase'
         },
         {
           name: 'Idaho',
@@ -178,14 +165,10 @@ export default {
           abbr: 'IN'
         },
         {
-          name: 'Iowa',
-          pop: 3155070,
-          abbr: ''
-        },
-        {
           name: 'Kansas',
           pop: 2913314,
-          abbr: 'KS'
+          abbr: 'KS',
+          hosp: 'increase'
         },
         {
           name: 'Kentucky',
@@ -405,7 +388,11 @@ export default {
         return st.name === this.state
       }).abbr
 
-      const one = this.tests.data.filter((el) => {
+      const hosp = this.states.find((st) => {
+        return st.name === this.state
+      }).hosp
+
+      const one = this.deaths.data.filter((el) => {
         return el.state === abbr
       })
 
@@ -418,89 +405,76 @@ export default {
         })
         .reverse()
 
-      let prevTotalTestResultsIncrease
-      let prevPositiveIncrease
-      const posTestRate = one
+      let prevDeathsIncrease
+      const deaths = one
         .map((e, i) => {
-          let totalTestResultsIncrease
-          if (!e.totalTestResultsIncrease || e.totalTestResultsIncrease < 0) {
-            totalTestResultsIncrease = prevTotalTestResultsIncrease
+          let deathIncrease
+          if (
+            e.deathIncrease === null ||
+            e.deathIncrease === undefined ||
+            e.deathIncrease < 0
+          ) {
+            deathIncrease = prevDeathsIncrease
           } else {
-            totalTestResultsIncrease = e.totalTestResultsIncrease
-            prevTotalTestResultsIncrease = e.totalTestResultsIncrease
+            deathIncrease = e.deathIncrease
+            prevDeathsIncrease = e.deathIncrease
           }
-
-          let positiveIncrease
-          if (!e.positiveIncrease || e.positiveIncrease < 0) {
-            positiveIncrease = prevPositiveIncrease
-          } else {
-            positiveIncrease = e.positiveIncrease
-            prevPositiveIncrease = e.positiveIncrease
-          }
-          return (
-            (Math.round((positiveIncrease / totalTestResultsIncrease) * 1000) /
-              1000) *
-            100
-          )
+          return deathIncrease
         })
         .reverse()
-      const rollingPosTestRate = this.getData(posTestRate, DAYS)
+      const rollingDeaths = this.getData(deaths, DAYS)
 
-      let prevPositiveIncrease2
-      const posTest = one
-        .map((e, i) => {
-          let positiveIncrease
-          if (!e.positiveIncrease || e.positiveIncrease < 0) {
-            positiveIncrease = prevPositiveIncrease2
-          } else {
-            positiveIncrease = e.positiveIncrease
-            prevPositiveIncrease2 = e.positiveIncrease
-          }
-          return positiveIncrease
-        })
-        .reverse()
-      const rollingPosTest = this.getData(posTest, DAYS)
-
-      let prevTotalTestResultsIncrease2
-      const totalTest = one
-        .map((e, i) => {
-          let totalTestResultsIncrease
-          if (!e.totalTestResultsIncrease || e.totalTestResultsIncrease < 0) {
-            totalTestResultsIncrease = prevTotalTestResultsIncrease2
-          } else {
-            totalTestResultsIncrease = e.totalTestResultsIncrease
-            prevTotalTestResultsIncrease2 = e.totalTestResultsIncrease
-          }
-          return totalTestResultsIncrease
-        })
-        .reverse()
-      const rollingTotalTest = this.getData(totalTest, DAYS)
+      let rollingHosps
+      if (hosp === 'increase') {
+        let prevHospsIncrease
+        const hosps = one
+          .map((e, i) => {
+            let hospitalizedIncrease
+            if (
+              e.hospitalizedIncrease === null ||
+              e.hospitalizedIncrease === undefined ||
+              e.hospitalizedIncrease < 0
+            ) {
+              hospitalizedIncrease = prevHospsIncrease
+            } else {
+              hospitalizedIncrease = e.hospitalizedIncrease
+              prevHospsIncrease = e.hospitalizedIncrease
+            }
+            return hospitalizedIncrease
+          })
+          .reverse()
+        rollingHosps = this.getData(hosps, DAYS).casesArr
+      } else {
+        rollingHosps = one
+          .map((e, i) => {
+            let hospsCurr
+            if (e.hospitalizedCurrently === null) {
+              hospsCurr = 0
+            } else {
+              hospsCurr = e.hospitalizedCurrently
+            }
+            return hospsCurr
+          })
+          .reverse()
+      }
 
       this.datacollection = {
         labels: days,
         datasets: [
           {
             fillOpacity: 1,
+            backgroundColor: `rgba(${this.colors[0][0]}, ${this.colors[0][1]}, ${this.colors[0][2]}, 1)`,
+            label: `${this.state} - Deaths`,
             fill: false,
+            data: rollingDeaths.casesArr
+          },
+          {
+            fillOpacity: 1,
+            yAxisID: 'y-axis-1',
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 1)`,
-            label: `${this.state} - Positive test rates`,
-            data: rollingPosTestRate.casesArr
-          },
-          {
-            fillOpacity: 1,
+            label: `${this.state} - Hospitalizations - ${hosp || 'current'}`,
             fill: false,
-            backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 1)`,
-            label: `${this.state} - Confirmed Cases`,
-            yAxisID: 'y-axis-2',
-            data: rollingPosTest.casesArr
-          },
-          {
-            fillOpacity: 1,
-            fill: false,
-            backgroundColor: `rgba(${this.colors[3][0]}, ${this.colors[3][1]}, ${this.colors[3][2]}, 1)`,
-            label: `${this.state} - Total Tests`,
-            yAxisID: 'y-axis-3',
-            data: rollingTotalTest.casesArr
+            data: rollingHosps
           }
         ]
       }

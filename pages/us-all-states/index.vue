@@ -60,6 +60,29 @@ export default {
 
     aggDea = [].concat(...aggDea)
 
+    let aggTest = Object.keys(dateGr).map((gr) => {
+      const cs = sumBy(dateGr[gr], (o) => {
+        return o.totalTestResultsIncrease
+      })
+      const ps = sumBy(dateGr[gr], (o) => {
+        return o.positiveIncrease
+      })
+      const dateString = String(gr).slice(4)
+      let Date = dateString.split('')
+      Date.splice(2, 0, '-')
+      Date = Date.join('')
+      const tr = (ps / cs) * 100
+      return {
+        Status: 'confirmed',
+        Pos: ps,
+        Cases: tr,
+        Tests: cs,
+        Date
+      }
+    })
+
+    aggTest = [].concat(...aggTest)
+
     let aggCon = Object.keys(dateGr).map((gr) => {
       const cs = sumBy(dateGr[gr], (o) => {
         return o.positiveIncrease
@@ -79,6 +102,7 @@ export default {
     return {
       aggCon,
       aggDea,
+      aggTest,
       colors
     }
   },
@@ -106,6 +130,22 @@ export default {
             },
             {
               id: 'y-axis-1',
+              display: true,
+              ticks: {
+                beginAtZero: true,
+                max: 30
+              },
+              gridLines: {
+                drawOnChartArea: false
+              },
+              position: 'right',
+              scaleLabel: {
+                display: true,
+                labelString: 'New Positive Test %'
+              }
+            },
+            {
+              id: 'y-axis-2',
               display: true,
               gridLines: {
                 drawOnChartArea: false
@@ -164,6 +204,7 @@ export default {
       const DAYS = parseInt(this.rollDays)
       const confirmed = this.getData(this.aggCon, DAYS)
       const deaths = this.getData(this.aggDea, DAYS)
+      const tests = this.getData(this.aggTest, DAYS)
 
       this.datacollection = {
         labels: confirmed.datesArr,
@@ -179,9 +220,17 @@ export default {
           {
             fillOpacity: 1,
             fill: false,
+            backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 1)`,
+            label: `US / positive test % - new`,
+            yAxisID: 'y-axis-1',
+            data: tests.casesArr
+          },
+          {
+            fillOpacity: 1,
+            fill: false,
             backgroundColor: `rgba(${this.colors[2][0]}, ${this.colors[2][1]}, ${this.colors[2][2]}, 1)`,
             label: `US / deaths - new`,
-            yAxisID: 'y-axis-1',
+            yAxisID: 'y-axis-2',
             data: deaths.casesArr
           }
         ]

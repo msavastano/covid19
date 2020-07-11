@@ -71,7 +71,7 @@ export default {
               position: 'right',
               scaleLabel: {
                 display: true,
-                labelString: 'Positive Test Rate'
+                labelString: 'Positive Test %'
               }
             },
             {
@@ -171,7 +171,7 @@ export default {
           if (
             e.totalTestResultsIncrease === null ||
             e.totalTestResultsIncrease === undefined ||
-            e.totalTestResultsIncrease < 0
+            e.totalTestResultsIncrease <= 0
           ) {
             totalTestResultsIncrease = prevTotalTestResultsIncrease
           } else {
@@ -244,7 +244,7 @@ export default {
             fillOpacity: 1,
             fill: false,
             backgroundColor: `rgba(${this.colors[1][0]}, ${this.colors[1][1]}, ${this.colors[1][2]}, 1)`,
-            label: `${this.state} - Positive test rates`,
+            label: `${this.state} - Positive test %`,
             data: rollingPosTestRate.casesArr
           },
           {

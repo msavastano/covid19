@@ -62,6 +62,11 @@ export default {
           icon: 'mdi-chart-line-stacked',
           title: 'US Deaths',
           to: '/us-deaths'
+        },
+        {
+          icon: 'mdi-alpha-u-circle-outline',
+          title: 'All US',
+          to: '/us-all-states'
         }
       ],
       miniVariant: false,

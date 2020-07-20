@@ -58,7 +58,7 @@ export default {
     }
     return {
       colors,
-      deaths
+      deaths: deaths.data
     }
   },
   data() {
@@ -147,7 +147,7 @@ export default {
         return st.name === this.state
       }).abbr
 
-      const one = this.deaths.data.filter((el) => {
+      const one = this.deaths.filter((el) => {
         return el.state === abbr
       })
 

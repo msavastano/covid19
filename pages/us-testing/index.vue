@@ -50,7 +50,7 @@ export default {
     }
     return {
       colors,
-      tests
+      tests: tests.data
     }
   },
   data() {
@@ -150,7 +150,7 @@ export default {
         return st.name === this.state
       }).abbr
 
-      const one = this.tests.data.filter((el) => {
+      const one = this.tests.filter((el) => {
         return el.state === abbr
       })
 

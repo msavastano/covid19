@@ -81,7 +81,23 @@ export default {
       }
     })
 
+    let totTest = Object.keys(dateGr).map((gr) => {
+      const cs = sumBy(dateGr[gr], (o) => {
+        return o.totalTestResultsIncrease
+      })
+      const dateString = String(gr).slice(4)
+      let Date = dateString.split('')
+      Date.splice(2, 0, '-')
+      Date = Date.join('')
+      return {
+        Status: 'confirmed',
+        Cases: cs,
+        Date
+      }
+    })
+
     aggTest = [].concat(...aggTest)
+    totTest = [].concat(...totTest)
 
     let aggCon = Object.keys(dateGr).map((gr) => {
       const cs = sumBy(dateGr[gr], (o) => {
@@ -103,7 +119,8 @@ export default {
       aggCon,
       aggDea,
       aggTest,
-      colors
+      colors,
+      totTest
     }
   },
   data() {
@@ -155,6 +172,18 @@ export default {
                 display: true,
                 labelString: 'New Deaths'
               }
+            },
+            {
+              id: 'y-axis-3',
+              display: true,
+              gridLines: {
+                drawOnChartArea: false
+              },
+              position: 'right',
+              scaleLabel: {
+                display: true,
+                labelString: 'New Tests'
+              }
             }
           ]
         }
@@ -205,6 +234,7 @@ export default {
       const confirmed = this.getData(this.aggCon, DAYS)
       const deaths = this.getData(this.aggDea, DAYS)
       const tests = this.getData(this.aggTest, DAYS)
+      const totTest = this.getData(this.totTest, DAYS)
 
       this.datacollection = {
         labels: confirmed.datesArr,
@@ -232,6 +262,14 @@ export default {
             label: `US / deaths - new`,
             yAxisID: 'y-axis-2',
             data: deaths.casesArr
+          },
+          {
+            fillOpacity: 1,
+            backgroundColor: `rgba(${this.colors[3][0]}, ${this.colors[3][1]}, ${this.colors[3][2]}, 1)`,
+            label: `US / tests - new`,
+            fill: false,
+            data: totTest.casesArr,
+            yAxisID: 'y-axis-3'
           }
         ]
       }

@@ -40,13 +40,14 @@
 import axios from 'axios'
 import states from '../../utils/states'
 import LineChart from '@/components/LineChart.vue'
+
 export default {
   components: {
     LineChart
   },
   async asyncData(context) {
     const deaths = await axios.get(
-      'https://covidtracking.com/api/v1/states/daily.json'
+      'https://api.covidtracking.com/v1/states/daily.json'
     )
     const colors = []
     for (let i = 0; i < 10; i++) {

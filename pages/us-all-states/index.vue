@@ -37,8 +37,8 @@ export default {
       colors.push(rbg)
     }
 
-    const conNew = await axios.get(
-      'https://covidtracking.com/api/v1/states/daily.json'
+    const conNew = await axios(
+      'https://api.covidtracking.com/v1/states/daily.json'
     )
 
     const dateGr = groupBy(conNew.data, 'date')

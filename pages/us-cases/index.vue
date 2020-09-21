@@ -91,7 +91,7 @@ export default {
     }
 
     const conNew = await axios.get(
-      'https://covidtracking.com/api/v1/states/daily.json'
+      'https://api.covidtracking.com/v1/states/daily.json'
     )
 
     const dateCon = groupBy(conNew.data, 'state')

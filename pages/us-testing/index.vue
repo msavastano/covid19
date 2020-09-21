@@ -38,7 +38,7 @@ export default {
   },
   async asyncData(context) {
     const tests = await axios.get(
-      'https://covidtracking.com/api/v1/states/daily.json'
+      'https://api.covidtracking.com/v1/states/daily.json'
     )
     const colors = []
     for (let i = 0; i < 10; i++) {

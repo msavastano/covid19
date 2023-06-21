@@ -17,7 +17,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "chart.js": "^2.9.3",
     "lodash": "^4.17.15",
-    "nuxt": "^2.13.3",
+    "nuxt": "^3.4.3",
     "vue-chartjs": "^3.5.0"
   },
   "devDependencies": {
